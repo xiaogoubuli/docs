@@ -1,0 +1,110 @@
+安装
+1. CentOS
+  $ sudo yum install git
+2. Windows
+  msysgit http://msysgit.github.io/
+
+配置
+$ git config --global user.name "user name"
+$ git config --global user.email email
+
+创建版本库
+1. $ mkdir docs
+   $ cd docs
+   $ git init
+
+2. $ git init docs
+
+把文件添加到版本库
+$ git add filename
+$ git commit -m "log"
+
+$ git status
+
+$ git diff filename
+
+$ git log
+$ git log --pretty=oneline
+
+$ git reset --hard HEAD^
+$ git reset --hard HEAD~100
+$ git reset --hard commitId
+
+$ git reflog
+
+$ git diff HEAD -- filename
+
+撤销工作目录修改
+$ git checkout -- filename
+
+撤销暂存区修改
+$ git reset HEAD filename
+
+删除
+$ git rm filename
+$ git commit -m "msg"
+
+$ ssh-keygen -t rsa -C "youremail@example.com"
+
+id_rsa 私钥
+id_rsa.pub 公钥
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
