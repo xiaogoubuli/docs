@@ -8,6 +8,17 @@
 $ git config --global user.name "user name"
 $ git config --global user.email email
 
+$ git config --global color.ui true
+
+别名
+$ git config --global alias.st status
+$ git config --global alias.ci commit
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.unstage 'reset HEAD'
+$ git config --global alias.last 'log -1'
+$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
 创建版本库
 1. $ mkdir docs
    $ cd docs
@@ -140,8 +151,12 @@ $ git push 远程版本库 标签名称
 推送全部尚未推送的本地标签到远程
 $ git push 远程版本库 --tags
 
-
-
+忽略特殊文件
+编辑.gitignore文件
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 
 
