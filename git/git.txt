@@ -151,20 +151,35 @@ $ git push 远程版本库 标签名称
 推送全部尚未推送的本地标签到远程
 $ git push 远程版本库 --tags
 
-忽略特殊文件
+忽略特殊文件 https://github.com/github/gitignore
 编辑.gitignore文件
 # Windows:
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 
+搭建Git服务器
+CentOS
+安装git
+$ sudo yum install git
+创建git用户
+$ sudo useradd git
+$ sudo passwd git
+$ su - git
+$ ssh-keygen -t rsa -C "xiaogoubuli@163.com"
+导入公钥id_rsa.pub到文件，一个公钥一行
+$ vi /home/git/.ssh/authorized_keys
+初始化Git仓库
+$ sudo git init --bare demo.git
+$ sudo chown -R git:git demo.git
+禁止git用户shell登录/etc/passwd
+git:x:501:501::/home/git:/usr/bin/git-shell
 
+$ git clone git@server:/data/demo.git
 
+用Gitosis管理公钥
 
-
-
-
-
+用Gitolite控制权限
 
 
 
