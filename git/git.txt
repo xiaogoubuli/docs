@@ -59,26 +59,58 @@ $ git push origin master
 克隆版本库
 $ git clone git@github.com:xiaogoubuli/docs.git
 
+分支
 
+创建分支
+$ git branch 分支名称
 
+切换分支
+$ git checkout 分支名称
 
+创建并切换分支
+$ git checkout -b 分支名称
 
+查看分支
+$ git branch
 
+合并分支
 
+合并指定分支到当前分支
+$ git merge 分支名称
 
+删除分支
+$ git branch -d 分支名称
 
+强制删除未合并的分支
+$ git branch -d 分支名称
 
+$ git log --graph --pretty=oneline --abbrev-commit
 
+禁用快进模式合并分支
+$ git merge --no-ff -m "merge with no-ff" 分支名称
 
+$ git stash
+$ git stash list
+$ git stash pop
+$ git stash apply stash@{0}
 
+查看远程版本库信息
+$ git remote
+$ git remote -v
 
+推送分支
+$ git push 远程版本库 本地分支名称
 
+抓取分支
+$ git pull
 
+设置本地分支与远程分支的链接
+$ git branch --set-upstream 本地分支名称 远程版本库/远程分支名称
 
+$ git fetch
 
-
-
-
+在本地创建和远程分支对应的分支
+$ git checkout -b 本地分支名称 远程版本库/远程分支名称
 
 
 
