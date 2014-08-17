@@ -44,16 +44,17 @@ $ git reset HEAD filename
 $ git rm filename
 $ git commit -m "msg"
 
-$ ssh-keygen -t rsa -C "youremail@example.com"
+$ ssh-keygen -t rsa -C "xiaogoubuli@163.com"
 
 id_rsa 私钥
 id_rsa.pub 公钥
 
+关联远程仓库
+$ git remote add origin git@github.com:xiaogoubuli/docs.git
 
-
-
-
-
+推送
+$ git push -u origin master （第一次推送）
+$ git push origin master
 
 
 
