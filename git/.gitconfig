@@ -1,0 +1,5 @@
+[user]
+	name = xiaogoubuli
+	email = xiaogoubuli@163.com
+[alias]
+	gt = !gitk
