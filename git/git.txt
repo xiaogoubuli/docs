@@ -10,6 +10,10 @@ $ git config --global user.email 电子邮箱
 
 $ git config --global color.ui true
 
+$ vi /etc/gitconfig
+[gui]
+    encoding = UTF-8
+
 别名
 $ git config --global alias.st status
 $ git config --global alias.ci commit
@@ -28,30 +32,48 @@ $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Cre
 2. $ git init 目录名
 
 把文件添加到版本库
-$ git add 文件名
-$ git commit -m "描述信息"
+1. $ git add 文件名
+   $ git commit -m "描述信息"
+2. $ git commit -a -m "描述信息" （不推荐）
 
 $ git status
+$ git status -s
 
 $ git diff
 $ git diff 文件名
+$ git diff --cached
 
 $ git log
 $ git log --pretty=oneline
+$ git log --pretty=raw
+$ git log --pretty=raw --graph 提交ID
+
+HEAD 当前分支
+
+$ git reflog
+$ git reflog show master
+$ git reflog -数值
+
+$ git diff
+$ git diff HEAD -- 文件名
+$ git diff HEAD
+
+撤销工作目录修改
+$ git checkout -- 文件名
+$ git checkout .
+$ git checkout 目录
+
+撤销暂存区修改
+$ git reset HEAD 文件名
+$ git reset 文件名
+
+工作目录暂存区不变
+$ git reset --soft 提交ID
 
 $ git reset --hard HEAD^
 $ git reset --hard HEAD~100
 $ git reset --hard 提交ID
-
-$ git reflog
-
-$ git diff HEAD -- 文件名
-
-撤销工作目录修改
-$ git checkout -- 文件名
-
-撤销暂存区修改
-$ git reset HEAD 文件名
+$ git reset --hard master@{1}
 
 删除
 $ git rm 文件名
@@ -85,11 +107,16 @@ $ git checkout -b 分支名称
 
 查看分支
 $ git branch
+$ git branch -v
 
 合并分支
 
 合并指定分支到当前分支
 $ git merge 分支名称
+
+$ git merge 提交ID
+
+$ git cat-file -p HEAD
 
 删除分支
 $ git branch -d 分支名称
@@ -183,7 +210,7 @@ $ git clone git@server:/data/demo.git
 
 用Gitolite控制权限
 
-
+$ git gt
 
 
 
