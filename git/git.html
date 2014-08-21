@@ -6,23 +6,57 @@
 </head>
 <body>
 <pre>
+
 分布式版本控制系统（Distributed Version Control System，简称DVCS）
+
 安装
+
+$ git --version
+$ git clone git://git.kernel.org/pub/scm/git/git.git
+
 1. Linux
 1.1 CentOS
+1.1.1
   $ sudo yum install git
+1.1.2
+  $ sudo yum install gcc gcc-c++ curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel
+  $ sudo tar zxvf git-VERSION
+  $ cd git-VERSION
+  $ sudo make prefix=/usr/local all
+  $ sudo make prefix=/usr/local install
 2. Windows
   msysgit http://msysgit.github.io/
 
 配置
-$ git config --global user.name "用户名"
-$ git config --global user.email 电子邮箱
+/etc/gitconfig 系统
+  $ git config --system
+~/.gitconfig 用户
+  $ git config --global
+.git/config 项目
+  $ git config
 
+$ git config --global user.name "用户名"
+$ git config --global user.name "XiaoGouBuLi"
+$ git config --global user.email 电子邮箱
+$ git config --global user.email xiaogoubuli@163.com
+
+$ git config --global core.editor vim
+$ git config --global merge.tool vimdiff
 $ git config --global color.ui true
+
+查看配置信息
+$ git config --list
+$ git config user.name
+$ git config user.email
 
 $ vi /etc/gitconfig
 [gui]
     encoding = UTF-8
+
+帮助
+$ git help 命令
+$ git 命令 --help
+$ man git-命令
 
 别名
 $ git config --global alias.st status
@@ -102,7 +136,9 @@ $ git push -u origin master （第一次推送）
 $ git push origin master
 
 克隆版本库
+$ git clone URL 目录名
 $ git clone git@github.com:xiaogoubuli/docs.git
+$ git clone git@github.com:xiaogoubuli/docs.git mydocs
 
 分支
 
