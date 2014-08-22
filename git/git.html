@@ -76,15 +76,41 @@ $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Cre
 2. $ git init 目录名
 
 把文件添加到版本库
-1. $ git add 文件名
+1. $ git add 文件名或目录名
    $ git commit -m "描述信息"
-2. $ git commit -a -m "描述信息" （不推荐）
+2. $ git commit -a -m "描述信息" （跳过使用暂存区，不推荐）
+
+暂存所有更新
+$ git add .
+启动文本编辑器输入提交描述信息，默认的提交消息包含最后一次运行 git status 的输出，放在注释行里，退出编辑器时，Git 会丢掉注释行，将说明内容和本次更新提交到仓库。
+$ git commit
+将修改差异的每一行都包含到注释中
+$ git commit -v
 
 $ git status
 $ git status -s
 
+忽略特殊文件 https://github.com/github/gitignore
+编辑.gitignore文件
+# #为注释符号，可以使用标准的glob模式匹配
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.[oa]
+*.~
+/abc
+# 后跟（/）说明是目录
+classes/
+# !表示取反，不忽略
+!.java
+doc/*.txt
+doc/**/*.txt
+
+查看尚未暂存的文件更新了哪些部分，比较的是工作目录中当前文件和暂存区域快照之间的差异，也就是修改之后还没有暂存起来的变化内容。
 $ git diff
 $ git diff 文件名
+若要看已经暂存起来的文件和上次提交时的快照之间的差异，可以用 git diff --cached 命令。（Git 1.6.1 及更高版本还允许使用 git diff --staged，效果是相同的，但更好记些。）
 $ git diff --cached
 
 $ git log
@@ -120,8 +146,25 @@ $ git reset --hard 提交ID
 $ git reset --hard master@{1}
 
 删除
+$ rm 文件名
 $ git rm 文件名
+强制删除
+$ git rm -f 文件名
 $ git commit -m "描述信息"
+移除跟踪但不删除文件
+$ git rm --cached 文件名
+删除所有 log/ 目录下扩展名为 .log 的文件
+$ git rm log/\*.log
+递归删除当前目录及其子目录中所有 ~ 结尾的文件
+$ git rm \*~
+
+Git 并不跟踪文件移动操作
+
+$ git mv 原文件名 新文件名
+相当于
+$ mv 原文件名 新文件名
+$ git rm 原文件名
+$ git add 新文件名
 
 $ ssh-keygen -t rsa -C "电子邮箱"
 
@@ -226,12 +269,6 @@ $ git push 远程版本库 标签名称
 推送全部尚未推送的本地标签到远程
 $ git push 远程版本库 --tags
 
-忽略特殊文件 https://github.com/github/gitignore
-编辑.gitignore文件
-# Windows:
-Thumbs.db
-ehthumbs.db
-Desktop.ini
 
 搭建Git服务器
 CentOS
