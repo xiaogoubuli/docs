@@ -6,6 +6,18 @@
 </head>
 <body>
 <pre>
+官网地址
+安装
+配置
+初始化
+暂存区
+提交
+历史
+标签
+分支
+远程仓库
+迁移
+http://git-scm.com/
 
 分布式版本控制系统（Distributed Version Control System，简称DVCS）
 
@@ -115,9 +127,46 @@ $ git diff --cached
 
 查看提交历史
 $ git log
+-p 选项展开显示每次提交的内容差异，用 -数值 则仅显示最近的几次更新
+$ git log -p -数值
+进行单词层面的对比，新增加的单词被 {+ +} 括起来，被删除的单词被 [- -] 括起来。
+$ git log -U上下文行数（默认3） --word-diff
+显示简要的增改行数统计，每个提交都列出了修改过的文件，以及其中添加和移除的行数，并在最后列出所有增减行数小计。
+$ git log --stat
+用 oneline 将每个提交放在一行显示，这在提交数很大时非常有用。另外还有 short，full 和 fuller 可以用
 $ git log --pretty=oneline
 $ git log --pretty=raw
 $ git log --pretty=raw --graph 提交ID
+定制要显示的记录格式
+$ git log --pretty=format:"%h - %an, %ar : %s"
+$ git log --pretty=format:"%h %s" --graph
+常用的选项及其释义
+-p	按补丁格式显示每个更新之间的差异。
+--word-diff	按 word diff 格式显示差异。
+--stat	显示每次更新的文件修改统计信息。
+--shortstat	只显示 --stat 中最后的行数修改添加移除统计。
+--name-only	仅在提交信息后显示已修改的文件清单。
+--name-status	显示新增、修改、删除的文件清单。
+--abbrev-commit	仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+--relative-date	使用较短的相对时间显示（比如，“2 weeks ago”）。
+--graph	显示 ASCII 图形表示的分支合并历史。
+--pretty	使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。
+--oneline	--pretty=oneline --abbrev-commit 的简化用法。
+-(n)	仅显示最近的 n 条提交
+--since, --after	仅显示指定时间之后的提交。
+--until, --before	仅显示指定时间之前的提交。
+--author	仅显示指定作者相关的提交。
+--committer	仅显示指定提交者相关的提交。
+--grep 选项搜索提交说明中的关键字
+如果要得到同时满足这两个选项搜索条件的提交，就必须用 --all-match 选项。否则，满足任意一个条件的提交都会被匹配出来
+另一个真正实用的git log选项是路径(path)，如果只关心某些文件或者目录的历史提交，可以在 git log 选项的最后指定它们的路径。因为是放在最后位置上的选项，所以用两个短划线（--）隔开之前的选项和后面限定的路径名。
+
+$ git log --since=2.weeks
+$ git log --pretty="%h - %s" --author=gitster --since="2008-10-01" --before="2008-11-01" --no-merges -- t/
+
+图形化工具
+$ git gt
+$ gitk
 
 HEAD 当前分支
 
@@ -129,12 +178,15 @@ $ git diff
 $ git diff HEAD -- 文件名
 $ git diff HEAD
 
-撤销工作目录修改
+修改最后一次提交
+$ git commit --amend
+
+撤销文件的修改
 $ git checkout -- 文件名
 $ git checkout .
 $ git checkout 目录
 
-撤销暂存区修改
+撤销已暂存的文件
 $ git reset HEAD 文件名
 $ git reset 文件名
 
@@ -224,20 +276,31 @@ $ git stash list
 $ git stash pop
 $ git stash apply stash@{0}
 
-查看远程版本库信息
+远程仓库
+
+查看远程仓库信息
+列出每个远程库的简短名字
 $ git remote
+显示对应的克隆地址
 $ git remote -v
+
+添加远程仓库
+$ git remote add 仓库名 仓库地址
+$ git remote add docs git://github.com:xiaogoubuli/docs.git
 
 推送分支
 $ git push 远程版本库 本地分支名称
 
 抓取分支
+如果设置了某个分支用于跟踪某个远端仓库的分支，可以使用 git pull 命令自动抓取数据下来，然后将远端分支自动合并到本地仓库中当前分支。
 $ git pull
 
 设置本地分支与远程分支的链接
 $ git branch --set-upstream 本地分支名称 远程版本库/远程分支名称
 
-$ git fetch
+从远程仓库抓取数据，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。
+$ git fetch 仓库名
+$ git fetch origin
 
 在本地创建和远程分支对应的分支
 $ git checkout -b 本地分支名称 远程版本库/远程分支名称
@@ -294,7 +357,6 @@ $ git clone git@server:/data/demo.git
 
 用Gitolite控制权限
 
-$ git gt
 </pre>
 </body>
 </html>
