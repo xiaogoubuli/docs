@@ -75,12 +75,14 @@ $ git config --global alias.st status
 $ git config --global alias.ci commit
 $ git config --global alias.co checkout
 $ git config --global alias.br branch
-$ git config --global alias.unstage 'reset HEAD'
-$ git config --global alias.last 'log -1'
+$ git config --global alias.unstage 'reset HEAD --'
+$ git config --global alias.last 'log -1 HEAD'
 $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
+$ git config --global alias.别名 '!外部命令'
+$ git config --global alias.gt '!gitk'
 备份.gitconfig文件
 
-创建版本库
+创建仓库
 1. $ mkdir 目录名
    $ cd 目录名
    $ git init
@@ -279,6 +281,8 @@ $ git stash apply stash@{0}
 远程仓库
 
 查看远程仓库信息
+$ git remote show 远程仓库
+$ git remote show origin
 列出每个远程库的简短名字
 $ git remote
 显示对应的克隆地址
@@ -290,6 +294,7 @@ $ git remote add docs git://github.com:xiaogoubuli/docs.git
 
 推送分支
 $ git push 远程版本库 本地分支名称
+$ git push origin master
 
 抓取分支
 如果设置了某个分支用于跟踪某个远端仓库的分支，可以使用 git pull 命令自动抓取数据下来，然后将远端分支自动合并到本地仓库中当前分支。
@@ -305,34 +310,56 @@ $ git fetch origin
 在本地创建和远程分支对应的分支
 $ git checkout -b 本地分支名称 远程版本库/远程分支名称
 
+重命名远程仓库
+$ git remote rename 远程仓库名 新名
+$ git remote rename origin docs
+
+删除远程仓库
+$ git remote rm 仓库名
+$ git remote rm origin
+
 标签
 
 查看所有标签
 $ git tag
+列出符合条件的标签
+$ git tag -l 'v0.*'
 
-创建标签
-$ git tag 标签名称
-$ git tag 标签名称 提交ID
+创建轻量级标签
+$ git tag 标签名
+$ git tag 标签名 提交对象校验和
 
 查看标签信息
-$ git show 标签名称
+$ git show 标签名
 
-创建带有说明的标签
-$ git tag -a 标签名称 -m "描述信息" 提交ID
+创建带有说明（附注）的标签（推荐）
+$ git tag -a 标签名 -m "描述信息"
+$ git tag -a 标签名 -m "描述信息" 提交ID
 
 使用私钥签名创建标签
-$ git tag -s 标签名称 -m "描述信息" 提交ID
+$ git tag -s 标签名 -m "描述信息"
+$ git tag -s 标签名 -m "描述信息" 提交ID
+
+验证标签
+$ git tag -v 标签名
 
 删除标签
-$ git tag -d 标签名称
+$ git tag -d 标签名
 $ git push 远程版本库 :refs/tags/标签名称
 
-推送指定标签到远程
-$ git push 远程版本库 标签名称
+推送指定标签到远程仓库
+默认情况下，git push 并不会把标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。
+$ git push 远程仓库 标签名
 
-推送全部尚未推送的本地标签到远程
-$ git push 远程版本库 --tags
+推送全部尚未推送的本地标签到远程仓库
+$ git push 远程仓库 --tags
 
+技巧
+自动补全
+如果你用的是 Bash shell，可以试试看 Git 提供的自动补全脚本。下载 Git 的源代码，进入 contrib/completion 目录，会看到一个 git-completion.bash 文件。将此文件复制到你自己的用户主目录中（译注：按照下面的示例，还应改名加上点：cp git-completion.bash ~/.git-completion.bash），并把下面一行内容添加到你的 .bashrc 文件中：
+source ~/.git-completion.bash
+也可以为系统上所有用户都设置默认使用此脚本。Mac 上将此脚本复制到 /opt/local/etc/bash_completion.d 目录中，Linux 上则复制到 /etc/bash_completion.d/ 目录中。这两处目录中的脚本，都会在 Bash 启动时自动加载。
+如果在 Windows 上安装了 msysGit，默认使用的 Git Bash 就已经配好了这个自动补全脚本，可以直接使用。
 
 搭建Git服务器
 CentOS
