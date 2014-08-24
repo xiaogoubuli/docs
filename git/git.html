@@ -250,7 +250,9 @@ $ git checkout 分支名称
 $ git checkout -b 分支名称
 
 查看分支
+当前所有分支的清单，分支前的 * 字符：它表示当前所在的分支。
 $ git branch
+查看各个分支最后一个提交对象的信息
 $ git branch -v
 
 合并分支
@@ -265,11 +267,15 @@ $ git cat-file -p HEAD
 调用可视化合并工具
 $ git mergetool
 
+筛选出你已经（或尚未）与当前分支合并的分支，可以用 --merged 和 --no-merged 选项
+$ git branch --merged
+$ git branch --no-merged
+
 删除分支
 $ git branch -d 分支名称
 
 强制删除未合并的分支
-$ git branch -d 分支名称
+$ git branch -D 分支名称
 
 $ git log --graph --pretty=oneline --abbrev-commit
 
