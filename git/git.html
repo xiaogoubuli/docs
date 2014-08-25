@@ -302,8 +302,10 @@ $ git remote add 仓库名 仓库地址
 $ git remote add docs git://github.com:xiaogoubuli/docs.git
 
 推送分支
-$ git push 远程版本库 本地分支名称
+$ git push 远程仓库名 分支名
 $ git push origin master
+$ git push 远程仓库名 本地分支名:远程分支名
+$ git push origin master:newname
 
 抓取分支
 如果设置了某个分支用于跟踪某个远端仓库的分支，可以使用 git pull 命令自动抓取数据下来，然后将远端分支自动合并到本地仓库中当前分支。
@@ -316,12 +318,37 @@ $ git branch --set-upstream 本地分支名称 远程版本库/远程分支名�
 $ git fetch 仓库名
 $ git fetch origin
 
+把该远程分支的内容合并到当前分支
+$ git merge origin/分支名
+
 $ git branch -a
 $ git branch -r
 
 在本地创建和远程分支对应的分支
-$ git checkout -b 本地分支名称 远程版本库/远程分支名称
+$ git checkout -b 本地分支名 远程仓库名/远程分支名
 $ git checkout -b edit origin/edit
+
+$ git checkout --track origin/edit
+
+删除远程分支
+$ git push 远程仓库名 :远程分支名
+$ git push origin :edit
+
+分支的衍合
+$ git checkout edit
+$ git rebase master
+$ git chekcout master
+$ git merge edit
+
+$ git rebase --onto master server client
+$ git checkout master
+$ git merge client
+$ git rebase 主分支 特性分支
+$ git rebase master server
+$ git checkout master
+$ git merge server
+
+一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。
 
 重命名远程仓库
 $ git remote rename 远程仓库名 新名
