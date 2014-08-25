@@ -320,6 +320,7 @@ $ git fetch origin
 
 把该远程分支的内容合并到当前分支
 $ git merge origin/分支名
+$ git merge origin/master
 
 $ git branch -a
 $ git branch -r
@@ -465,8 +466,11 @@ SSH 公钥默认储存在账户的主目录下的 ~/.ssh 目录。
 
      - 一般以单个空格紧跟短划线或者星号作为每项条目的起始符。每个条目间用一空行隔开。
        不过这里按自己项目的约定，可以略作变化。
-	   
+
 $ git log --no-merges
+
+$ git log --no-merges origin/master ^issue54
+
 </pre>
 </body>
 </html>
