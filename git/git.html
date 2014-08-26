@@ -175,9 +175,13 @@ $ gitk
 
 HEAD 当前分支
 
+引用日志
 $ git reflog
 $ git reflog show master
 $ git reflog -数值
+
+$ git show HEAD@{数值}
+$ git show master@{yesterday}
 
 $ git diff
 $ git diff HEAD -- 文件名
@@ -343,6 +347,13 @@ $ git checkout --track origin/edit
 $ git push 远程仓库名 :远程分支名
 $ git push origin :edit
 
+$ git show 分支名
+$ git show edit
+$ git show 提交对象
+
+$ git rev-parse 分支名
+$ git rev-parse edit
+
 分支的衍合
 $ git checkout edit
 $ git rebase master
@@ -380,8 +391,6 @@ $ git tag 标签名 提交对象校验和
 
 查看标签信息
 $ git show 标签名
-
-$ git show 提交对象
 
 创建带有说明（附注）的标签（推荐）
 $ git tag -a 标签名 -m "描述信息"
@@ -481,6 +490,7 @@ $ git log --no-merges
 
 $ git log --no-merges origin/master ^issue54
 
+git svn
 </pre>
 </body>
 </html>
