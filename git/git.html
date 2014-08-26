@@ -182,6 +182,8 @@ $ git reflog -数值
 $ git diff
 $ git diff HEAD -- 文件名
 $ git diff HEAD
+$ git diff 原始分支...当前分支
+$ git diff master...edit
 
 修改最后一次提交
 $ git commit --amend
@@ -378,6 +380,8 @@ $ git tag 标签名 提交对象校验和
 
 查看标签信息
 $ git show 标签名
+
+$ git show 提交对象
 
 创建带有说明（附注）的标签（推荐）
 $ git tag -a 标签名 -m "描述信息"
