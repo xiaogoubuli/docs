@@ -88,6 +88,15 @@ $ git config --global alias.gt '!gitk'
    $ git init
 
 2. $ git init 目录名
+.git/ 目录结构
+  HEAD  文件指向当前分支
+  config  文件包含了项目特有的配置选项
+  description  文件仅供 GitWeb 程序使用
+  hooks/  目录保存了客户端或服务端钩子脚本
+  index  文件保存了暂存区域信息
+  info/  目录保存了一份不希望在 .gitignore 文件中管理的忽略模式 (ignored patterns) 的全局可执行文件
+  objects/  目录存储所有数据内容
+  refs/  目录存储指向数据 (分支) 的提交对象的指针
 
 把文件添加到版本库
 1. $ git add 文件名或目录名
