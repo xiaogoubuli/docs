@@ -6,11 +6,44 @@
 </head>
 <body>
 <pre>
+修改IP：
+$ vi /etc/sysconfig/network-scripts/ifcfg-xxxx
+ONBOOT=yes
+BOOTPROTO=static
+IPADDR=192.168.1.65
+NETMASK=192.168.1.255
+GATEWAY=192.168.1.1
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+$ ifup xxxx
+
+
+
+
 日期时间
 Warning: File `Makefile' has modification time 5.8e+06 s in the future
 系统时间不正确，文档被修改的时间比系统时间大
 $ date 08/18/2008
 $ date -s 11:22:33
+
+配置本地iso yum源：
+上传iso到指定位置
+$ mount -o 
+$ vi 
+$ yum install vim
+
+安装vnc：
+安装所需的组件
+$ rpm -q tigervnc-server
+$ yum install tigervnc-server
+$ yum groupinstall Desktop
+创建 VNC 用户的帐号
+$ useradd pspot
+$ passwd pspot
+
+安装Oracle：
+上传zip到/usr/local/src
+
 </pre>
 </body>
 </html>
