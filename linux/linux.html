@@ -16,6 +16,9 @@ GATEWAY=192.168.1.1
 DNS1=8.8.8.8
 DNS2=8.8.4.4
 $ ifup xxxx
+$ service network restart
+$ ifconfig
+$ ping www.baidu.com
 
 
 
@@ -28,8 +31,12 @@ $ date -s 11:22:33
 
 配置本地iso yum源：
 上传iso到指定位置
-$ mount -o 
-$ vi 
+$ mount -o loop /xxx.iso /media/cdrom
+$ vi /etc/yum.repos.d/CentOS-Media.repo
+baseurl=file:///media/CentOS-DVD1/
+        file:///media/CentOS-DVD2/
+gpgcheck=0
+enabled=1
 $ yum install vim
 
 安装vnc：
