@@ -21,6 +21,12 @@ SQL> SELECT * FROM v$nls_parameters;
 查看当前登录的用户：
 SQL> SELECT user FROM dual;
 
+查看当前用户拥有的角色：
+SQL> SELECT * FROM user_role_privs;
+
+查看当前用户拥有的权限：
+SQL> SELECT * FROM session_privs;
+
 </pre>
 <body>
 </html>
