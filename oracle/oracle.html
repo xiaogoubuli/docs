@@ -337,6 +337,80 @@ SQL> SELECT object_name, aggregate, parallel FROM user_procedures WHERE object_n
 删除函数：
 DROP FUNCTION 函数名;
 
+包：
+包通常由两部分组成：规范和包体。包规范可列出可用的过程、函数、类型和对象。包体中包含实际的代码。
+创建包规范：
+CREATE [OR REPLACE] PACKAGE 包名
+{IS | AS}
+    包规范
+END 包名;
+
+示例：
+CREATE OR REPLACE PACKAGE test_package AS
+    TYPE t_ref_cursor IS REF CURSOR;
+    FUNCTION get_products_ref_cursor RETURN t_ref_cursor;
+    PROCEDURE update_product_price (
+        p_id IN products.id%TYPE,
+        p_val IN NUMBER
+    );
+END test_package;
+/
+
+创建包体：
+CREATE [OR REPLACE] PACKAGE BODY 包名
+{IS | AS}
+    包体代码
+END 包名;
+
+示例：
+CREATE PACKAGE BODY test_package AS
+    FUNCTION get_products_ref_cursor
+    RETURN t_ref_cursor IS
+        v_products_ref_cursor t_ref_cursor;
+    BEGIN
+        OPEN v_products_ref_cursor FOR
+            SELECT id, name, price
+            FROM products;
+        RETURN v_products_ref_cursor;
+    END get_products_ref_cursor;
+    
+    PROCEDURE update_product_price (
+        p_product_id IN products.id%TYPE,
+        p_factor IN NUMBER
+    ) AS
+        v_product_count INTEGER;
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_product_count
+        FROM products
+        WHERE id = p_id;
+        IF v_product_count = 1 THEN
+            UPDATE products
+            SET price = price * p_factor
+            WHERE id = p_id;
+            COMMIT;
+        END IF;
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+    END update_product_price;
+END test_package;
+/
+
+调用包中的函数和过程：
+SQL> SELECT test_package.get_products_ref_cursor
+     FROM dual;
+SQL> CALL test_package.update_t(1, 2.3);
+
+获取有关包中函数和过程的信息：
+从user_procedures视图中可以获得某个包中的函数和过程的信息。
+SQL> SELECT object_name, procedure_name
+     FROM user_procedures
+     WHERE object_name = 'TEST_PACKAGE';
+
+删除包：
+DROP PACKAGE 包名;
+
 SQL优化：
 1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
 2. 使用表连接而不是多个查询。查询中必须选择连接顺序，将行较少的表连接到后面。查询中应避免连接复杂的视图，因为这样会导致查询中首先执行的是视图，然后才是实际查询。相反地，要使用表而不是视图编写查询。
