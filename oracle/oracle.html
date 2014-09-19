@@ -411,6 +411,56 @@ SQL> SELECT object_name, procedure_name
 删除包：
 DROP PACKAGE 包名;
 
+触发器：触发器是当特定的SQL DML语句（INSERT、UPDATE或DELETE）在特定的数据库表上运行时，由数据库自动运行的过程。触发器可以在DML语句运行之前和之后被激活。行级触发器和语句级触发器。
+创建触发器：
+CREATE [OR REPLACE] TRIGGER 触发器名
+{BEFORE | AFTER | INSTEAD OF | FOR} 激活触发器事件
+ON 触发器引用的表名
+-- 行级触发器
+[FOR EACH ROW]
+[{FORWARD | REVERSE} CROSSEDITION]
+[{FOLLOWS | PRECEDES} 模式名.其他触发器名]
+[{ENABLE | DISABLE}]
+[WHEN 触发条件]
+BEGIN
+    触发器代码体
+END 触发器名;
+
+示例：
+CREATE OR REPLACE TRIGGER before_product_price_update
+BEFORE UPDATE OF price
+ON products
+FOR EACH ROW WHEN (new.price < old.price * 0.75)
+BEGIN
+    -- 使用:old和:new别名访问列的原值和新值
+    DBMS_OUTPUT.PUT_LINE(:old.id || :old.price);
+    DBMS_OUTPUT.PUT_LINE(:new.price);
+    INSERT INTO product_price_audit (
+        id, old_price, new_price
+    ) VALUES (
+        :old.id, :old.price, :new.price
+    );
+END before_product_price_update;
+/
+
+启用一个已禁用的触发器
+SQL> ALTER TRIGGER 触发器名 ENABLE
+启用一个表的所有触发器
+SQL> ALTER TABLE 表名 ENABLE
+
+获取有关触发器的信息：
+从user_triggers视图中可以获得触发器的信息，从all_triggers中可以获得要访问的所有触发器的信息。
+SQL> SELECT trigger_name, tigger_type, triggering_event, table_owner, base_object_type, table_name, referencing_names, when_clause, status, description, action_type, trigger_body
+     FROM user_triggers
+     WHERE trigger_name = 'BEFORE_PRODUCT_PRICE_UPDATE';
+
+禁用和启用触发器：
+SQL> ALTER TRIGGER before_product_price_update DISABLE;
+SQL> ALTER TRIGGER before_product_price_update ENABLE;
+
+删除触发器：
+SQL> DROP TRIGGER before_product_price_update;
+
 SQL优化：
 1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
 2. 使用表连接而不是多个查询。查询中必须选择连接顺序，将行较少的表连接到后面。查询中应避免连接复杂的视图，因为这样会导致查询中首先执行的是视图，然后才是实际查询。相反地，要使用表而不是视图编写查询。
