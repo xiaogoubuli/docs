@@ -258,6 +258,50 @@ OTHERS异常：可以处理所有异常，必须在EXCEPTION块中所有特定�
         过程代码体
     END 过程名;
 
+示例：
+CREATE OR REPLACE update_t(
+    p_id IN t.id%TYPE,
+    p_val IN NUMBER
+) AS
+    v_count INTEGER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM t
+    WHERE id = p_id;
+    IF v_count = 1 THEN
+        UPDATE t
+        SET price = price * val
+        WHERE id = p_id;
+        COMMIT;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+END update_t;
+/
+
+调用过程：
+-- 用位置表示法传递参数
+SQL> CALL update_t(1, 2.3);
+
+在Oracle Database 11g中可以使用命名表示法或混合表示法来传递参数。
+-- 用命名表示法传递参数
+SQL> CALL update_t(p_val => 2.3, p_id => 1);
+-- 用混合表示法传递参数时，位置表示法必须在命名表示法之前。
+SQL> CALL update_t(1, p_val => 2.3);
+
+获取有关过程的信息：
+从user_procedures视图中可以获得有关过程的信息。
+从all_procedures中可以获得有关要访问的所有过程的信息。
+SQL> SELECT object_name, aggregate, parallel FROM user_procedures WHERE object_name = 'update_t';
+
+删除过程：
+SQL> DROP PROCEDURE update_t;
+
+查看过程中的错误：
+SQL> SHOW ERRORS
+
 
 SQL优化：
 1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
