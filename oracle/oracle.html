@@ -294,7 +294,7 @@ SQL> CALL update_t(1, p_val => 2.3);
 获取有关过程的信息：
 从user_procedures视图中可以获得有关过程的信息。
 从all_procedures中可以获得有关要访问的所有过程的信息。
-SQL> SELECT object_name, aggregate, parallel FROM user_procedures WHERE object_name = 'update_t';
+SQL> SELECT object_name, aggregate, parallel FROM user_procedures WHERE object_name = 'UPDATE_T';
 
 删除过程：
 SQL> DROP PROCEDURE update_t;
@@ -302,6 +302,40 @@ SQL> DROP PROCEDURE update_t;
 查看过程中的错误：
 SQL> SHOW ERRORS
 
+函数：函数与过程很相似，唯一的区别是函数必须向调用它的语句返回一个值。
+创建函数：
+CREATE OR REPLACE FUNCTION 函数名
+[(参数名 [IN | OUT | IN OUT] 参数类型 [, ...])]
+RETURN 返回值类型
+{IS | AS}
+BEGIN
+    函数代码体
+END 函数名;
+
+示例：
+CREATE OR REPLACE FUNCTION circle_area(
+    p_radius IN NUMBER
+) RETURN NUMBER AS
+    v_pi NUMBER := 3.14;
+    v_area NUMBER;
+BEGIN
+    v_area := v_pi * POWER(p_radius, 2);
+    RETURN v_area;
+END cirle_area;
+/
+
+调用函数：
+SQL> SELECT circle_area(2) FROM dual;
+
+在Oracle Database 11g中，调用函数时也可以使用命名表示法和混合表示法。
+SQL> SELECT circle_area(p_radius => 2) FROM dual;
+
+获取有关函数的信息：
+从user_procedures视图中可以获得有关函数的信息。
+SQL> SELECT object_name, aggregate, parallel FROM user_procedures WHERE object_name = 'CIRCLE_AREA';
+
+删除函数：
+DROP FUNCTION 函数名;
 
 SQL优化：
 1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
