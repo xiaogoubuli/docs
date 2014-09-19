@@ -27,6 +27,30 @@ SQL> SELECT * FROM user_role_privs;
 查看当前用户拥有的权限：
 SQL> SELECT * FROM session_privs;
 
+SQL优化：
+1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
+2. 使用表连接而不是多个查询。查询中必须选择连接顺序，将行较少的表连接到后面。查询中应避免连接复杂的视图，因为这样会导致查询中首先执行的是视图，然后才是实际查询。相反地，要使用表而不是视图编写查询。
+3. 执行连接时使用完全限定的列引用（表别名.列名）。因为对列的所有引用包含了表别名，数据库不需要浪费时间去搜索所有表，从而减少了执行时间。
+4. 使用CASE表达式而不是多个查询。
+5. 添加表索引。索引的缺点是当向表中添加一行时，需要额外花费时间来更改新行的索引。当单个查询检索的行数小于等于表总行数的10%时，建立索引是有用的。建立索引的列应该用于存储范围广泛的值。Oracle数据库自动为表的主键和包含在唯一约束中的列创建索引。当执行分级查询（CONNECT BY）时，应该为START WITH和CONNECT BY子句所引用的列添加索引。对于包含小范围值且查询的WHERE子句频繁使用的列，应该考虑在此列上添加位图索引。
+6. 使用WHERE而不是HAVING。WHERE子句用于过滤行，HAVING子句用于过滤行组。先使用WHERE子句过滤行，以避免花费时间去分组应该被过滤掉的行。
+    BAD:  SELECT id, AVG(val) FROM t GROUP BY id HAVING id IN (1, 2);
+    GOOD: SELECT id, AVG(val) FROM t WHERE id IN (1, 2) GROUP BY id;
+7. 使用UNION ALL而不是UNION。UNION ALL用于获得两个查询检索到的所有行，包括重复行；UNION用于获得查询检索到的所有不重复的行，UNION删除重复的行需要一定时间。
+8. 使用EXISTS而不是IN。IN用于检查一个值是否包含在列表中，EXISTS用于检查子查询返回行的存在性。在子查询中，EXISTS提供的性能通常比IN提供的性能要好。
+    BAD:  SELECT id, name FROM t WHERE id IN (SELECT id FROM t2);
+    GOOD: SELECT id, name FROM t outer WHERE EXISTS (SELECT 1 FROM t2 inner WHERE inner.id = outer.id);
+9. 使用EXISTS而不是DISTINCT。DISTINCT用于禁止重复行的显示，DISTINCT在排除重复行之前要对检索到的行排序。
+    BAD:  SELECT DISTINCT a.id, a.name FROM t1 a, t2 b WHERE a.id = b.id;
+    GOOD: SELECT id, name FROM t1 outer WHERE EXISTS (SELECT 1 FROM t2 inner WHERE inner.id = outer.id);
+10. 使用GROUPING SETS而不是CUBE。GROUPING SETS提供的性能通常比CUBE提供的性能要好。
+11. 使用绑定变量。
+
+
+
+
+
+
 </pre>
 <body>
 </html>
