@@ -18,14 +18,213 @@ PL/SQL Developer显示中文乱码：
 SQL> SELECT * FROM v$nls_parameters;
 设置环境变量NLS_LANG=SIMPLIFIED CHINESE_CHINA.ZHS16GBK
 
+执行SQL脚本文件
+SQL> @ 文件路径名
+
 查看当前登录的用户：
 SQL> SELECT user FROM dual;
+
+打开服务器输出
+SQL> SET SERVEROUTPUT ON
 
 查看当前用户拥有的角色：
 SQL> SELECT * FROM user_role_privs;
 
 查看当前用户拥有的权限：
 SQL> SELECT * FROM session_privs;
+
+
+
+PL/SQL（Procedural Language/SQL）：
+
+块结构：
+[DECLARE
+    声明变量语句;
+]
+BEGIN
+    可执行语句;
+[EXCEPTION]
+    异常处理语句;
+END;
+/
+
+例：
+DECLARE
+    -- v_id    INTEGER;
+    -- v_name  VARCHAR2(50);
+    -- v_price NUMBER(5, 2);
+    -- 使用products表中的price列相同的类型
+    -- v_price products.price%TYPE;
+    v_width  INTEGER;
+    v_height INTEGER := 2;
+    v_area   INTEGER :=6;
+BEGIN
+    -- 计算
+    v_width := v_area / v_height;
+    DBMS_OUTPUT.PUT_LINE('v_width = ' || v_width);
+EXCEPTION
+    WHEN ZERO_DIVIDE THEN
+        DBMS_OUTPUT.PUT_LINE('Division by zero');
+END;
+/
+
+条件逻辑：可以嵌套使用
+IF 条件1 THEN
+    语句1;
+ELSIF 条件2 THEN
+    语句2;
+ELSE
+    语句3;
+END IF;
+
+循环：
+简单循环：
+LOOP
+    语句;
+END LOOP;
+
+可以使用EXIT或EXIT WHEN语句结束简单循环。
+
+例：
+v_counter := 0;
+LOOP
+    v_counter := v_counter + 1;
+    EXIT WHEN v_counter = 5;
+END LOOP;
+
+在Oracle Database 11g中也可以使用CONTINUE或CONTINUE WHEN语句结束循环的当前迭代，CONTINUE或CONTINUE WHEN语句不能跨过过程、函数或方法的边界。
+
+WHILE循环
+WHILE 条件 LOOP
+    语句;
+END LOOP;
+
+例：
+v_counter := 0;
+WHILE v_counter < 6 LOOP
+    v_counter := v_counter + 1;
+END LOOP;
+
+FOR循环
+FOR 循环变量 IN [REVERSE] 下限值..上限值 LOOP
+    语句;
+END LOOP;
+
+例：
+FOR v_counter IN 1..5 LOOP
+    DBMS_OUTPUT.PUT_LINE(v_counter);
+END LOOP;
+
+游标：可以使用游标（cursor）获取查询返回的记录。
+CURSOR 游标名 IS
+    查询语句;
+
+使用游标步骤：
+1. 声明一些变量，用于保存记录的列值。
+2. 声明游标，并指定查询。
+3. 打开游标。
+4. 一次从游标中获取一个记录，并将列值存储在声明的变量中。对变量执行操作。
+5. 关闭游标。
+
+示例：
+SET SERVEROUTPUT ON
+DECLARE
+    -- 1
+    v_id    t.id%TYPE;
+    v_name  t.name%TYPE;
+    v_price t.price%TYPE;
+    -- 2
+    CURSOR v_cursor IS
+        SELECT id, name, price
+        FROM t
+        ORDER BY id;
+BEGIN
+    -- 3
+    OPEN v_cursor;
+    LOOP
+        -- 4
+        TETCH v_cursor
+        INTO v_id, v_name, v_price;
+        EXIT WHEN v_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_id || ', ' || v_name || ', ' || v_price);
+    END LOOP;
+    -- 5
+    CLOSE v_cursor;
+END;
+/
+
+利用FOR循环可以访问游标中的记录。当使用FOR循环时，可以不显示地打开和关闭游标，FOR循环会自动执行这些操作。
+示例：
+SET SERVEROUTPUT ON
+DECLARE
+    CURSOR v_cursor IS
+        SELECT id, name, price
+        FROM t
+        ORDER BY id;
+BEGIN
+    FOR v_t IN v_cursor LOOP
+        DBMS_OUTPUT.PUT_LINE(v_t.id || ', ' || v_t.name || ', ' || v_t.price);
+    END LOOP;
+END;
+/
+
+可以对游标使用OPEN-FOR语句，将游标分配给不同的查询，更加灵活的处理游标。
+示例：
+SET SERVEROUTPUT ON
+DECLARE
+    TYPE t_cursor IS
+    REF CURSOR RETURN t%ROWTYPE;
+    v_cursor t_cursor;
+    v_t t%ROWTYPE;
+BEGIN
+    OPEN v_cursor FOR
+    SELECT * FROM t WHERE id < 5;
+    LOOP
+        FETCH v_cursor INTO v_t;
+        EXIT WHEN v_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_t.id || ', ' || v_t.name || ', ' || v_t.price);
+    END LOOP;
+    CLOSE v_cursor;
+END;
+/
+
+无约束游标：没有返回类型，可以运行任何查询。
+示例：
+SET SERVEROUTPUT ON
+DECLARE
+    TYPE t_cursor IF REF CURSOR;
+    v_cursor t_cursor;
+    v_t1 t1%ROWTYPE;
+    v_t2 t2%ROWTYPE;
+BEGIN
+    OPEN v_cursor FOR
+    SELECT * FROM t1 WHERE id < 5;
+    LOOP
+        FETCH v_cursor INTO v_t1
+        EXIT WHEN v_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_t1.id || ', ' || v_t1.name || ', ' || v_t1.price);
+    END LOOP;
+    OPEN v_cursor FOR
+    SELECT * FROM t2 WHERE id < 3;
+    LOOP
+        FETCH v_cursor INTO v_t2
+        EXIT WHEN v_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_t2.id || ', ' || v_t2.name || ', ' || v_t2.price);
+    END LOOP;
+    CLOSE v_cursor;
+END;
+/
+
+
+过程：
+创建过程：
+    CREATE [OR REPLACE] PROCEDURE 过程名
+    [(参数名 [IN | OUT | IN OUT] 参数类型 [, ...])]
+    {IS | AS}
+    BEGIN
+        过程代码体
+    END 过程名;
+
 
 SQL优化：
 1. 使用WHERE子句过滤行，WHERE子句中应避免使用函数，否则会增加执行时间。
