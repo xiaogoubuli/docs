@@ -33,6 +33,117 @@ SQL> SELECT * FROM user_role_privs;
 查看当前用户拥有的权限：
 SQL> SELECT * FROM session_privs;
 
+简单函数：函数可以接受零到多个输入参数，并返回一个输出参数。
+
+单行函数：单行函数同时只能对一行进行操作，且对输入的每一行返回一行输出结果。
+字符函数：
+数字函数：
+转换函数：
+日期函数：
+正则表达式函数：
+
+聚合函数：聚合函数同时可以对多行进行操作，并返回一行输出结果。
+
+集合操作符：所有查询返回的列数以及列的类型必须匹配，列名可以不同。可组合使用。
+UNION ALL：所有行，包括重复行
+SQL> SELECT t1_id, t1_name FROM t1
+     UNION ALL
+     SELECT t2_id, t2_name FROM t2
+     ORDER BY 1;
+
+UNION：所有行，不包括重复行
+SQL> SELECT t1_id, t1_name FROM t1
+     UNION
+     SELECT t2_id, t2_name FROM t2;
+     
+INTERSECT：共有行
+SQL> SELECT t1_id, t1_name FROM t1
+     INTERSECT
+     SELECT t2_id, t2_name FROM t2;
+
+MINUS：从前一个查询出的行中减去后一个查询出的行
+SQL> SELECT t1_id, t1_name FROM t1
+     MINUS
+     SELECT t2_id, t2_name FROM t2;
+
+集合操作符可组合使用。
+SQL> (SELECT t1_id, t1_name FROM t1
+     UNION ALL
+     SELECT t2_id, t2_name FROM t2)
+     MINUS
+     SELECT t3_id, t3_name FROM t3;
+
+TRANSLATE(x, from_string, to_string)函数：在x中查找from_string中的字符，并将其转换成to_string；中对应的字符。
+SQL> SELECT TRANSLATE('SUCCESS', 'CESU', 'cesu') FROM dual;
+SQL> SELECT id, TRANSLATE(name, 'ABC', 'abc') FROM t;
+SQL> SELECT TRANSLATE(12345, 12345, 67890) FROM dual;
+
+DECODE(value, search_value, result, default_value)函数：对value与search_value进行比较，如果相等返回result，否则返回default_value。允许在SQL中执行if-then-else类型的逻辑处理，而不需要使用PL/SQL。可以向DECODE函数传递多个搜索和结果参数。
+SQL> SELECT DECODE(1, 1, 2, 3) FROM dual;
+SQL> SELECT id, val, DECODE(val, 1, 'YES', 'NO') FROM t;
+SQL> SELECT id, val, DECODE(val, 
+                              1, 'ONE',
+                              2, 'TWO',
+                              'NULL') FROM t;
+
+CASE表达式：
+简单CASE表达式，使用表达式确定返回值
+CASE search_expression
+    WHEN expression_1 THEN return_1
+    WHEN expression_2 THEN return_2
+    ...
+    WHEN expression_N THEN return_N
+    ELSE default_result
+END
+
+示例：
+SQL> SELECT id, type_id,
+            CASE type_id
+                WHEN 1 THEN 'CD'
+                WHEN 2 THEN 'DVD'
+                ELSE 'OTHER'
+            END
+     FROM t;
+
+搜索CASE表达式，使用条件确定返回值，可以使用操作符。
+CASE
+    WHEN condition_1 THEN return_1
+    WHEN condition_2 THEN return_2
+    ...
+    WHEN condition_N THEN return_N
+    ELSE default_result
+END
+
+示例：
+SQL> SELECT id, type_id,
+            CASE type_id
+                WHEN type_id = 1 THEN 'CD'
+                WHEN type_id = 2 THEN 'DVD'
+                WHEN type_id > 2 THEN 'DVD'
+                ELSE 'OTHER'
+            END
+     FROM t;
+
+层次化查询：
+SELECT [LEVEL], column, expression, ...
+FROM 表名
+[WHERE where子句]
+[[START WITH start_condtion] [CONNECT BY PRIOR prior_condition]]
+
+示例：
+SQL> SELECT id, leader_id, name,
+     FROM t
+     START WITH id = 1
+     CONNECT BY PRIOR id = leader_id;
+
+
+
+
+
+
+
+
+
 
 
 PL/SQL（Procedural Language/SQL）：
