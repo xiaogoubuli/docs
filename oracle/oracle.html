@@ -5,6 +5,43 @@
 </head>
 <body>
 <pre>
+安装：
+
+启动：
+手动启动：
+# su - oracle
+$ lsnrctl start
+$ export ORACLE_SID=实例名1
+$ sqlplus / as sysdba
+SQL> startup
+SQL> quit
+$ export ORACLE_SID=实例名2
+$ sqlplus / as sysdba
+SQL> startup
+SQL> quit
+
+自动启动：
+vi /etc/rc.local
+su - oracle <<EOF
+lsnrctl start
+sqlplus / as sysdba
+startup
+quit
+EOF
+su - oracle <<EOF
+export ORACLE_SID=实例名2
+sqlplus / as sysdba
+startup
+quit
+EOF
+
+
+关闭：
+管理：
+优化：
+
+
+
 Oracle Database 10g SQL
 SQL：Structured Query Language 结构化查询语言
 
