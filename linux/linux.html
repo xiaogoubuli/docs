@@ -27,6 +27,11 @@ IDE硬盘：/dev/hda1
 SCSI/SATA硬盘：/dev/sda1
 
 修改IP：
+$ ifconfig 设备名 IP地址 （临时生效）
+示例：
+$ ifconfig eth0 192.168.56.2
+
+
 $ vi /etc/sysconfig/network-scripts/ifcfg-xxxx
 ONBOOT=yes
 BOOTPROTO=static
