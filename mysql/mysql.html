@@ -10,6 +10,16 @@
 
 mysql> help
 
+忘记密码：
+[mysqld]
+skip-grant-tables
+
+$ mysql -u root -p mysql
+
+mysql> UPDATE user SET password=password("12345678") WHERE user='root';
+mysql> flush privileges;
+
+删除配置文件中添加的skip-grant-tables
 </pre>
 </body>
 </html>
