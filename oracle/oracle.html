@@ -43,6 +43,12 @@ $ imp 用户名/密码@主机名或ip/实例名 file=文件路径名 full=y
 导出dmp：
 $ exp 用户名/密码@主机名或ip/实例名 file=文件路径名 tables="表名" query=\"where 字段名 like '%条件%'\"
 
+修改sys密码：
+# su - oracle
+$ sqlplus /nolog
+SQL> conn / as sysdba
+SQL> ALTER USER sys IDENTIFIED BY 12345678;
+
 优化：
 
 
