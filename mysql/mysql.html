@@ -20,6 +20,20 @@ mysql> UPDATE user SET password=password("12345678") WHERE user='root';
 mysql> flush privileges;
 
 删除配置文件中添加的skip-grant-tables
+
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+-DMYSQL_UNIX_ADDR=/usr/local/mysql/mysql.sock \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_MEMORY_STORAGE_ENGINE=1 \
+-DWITH_READLINE=1 \
+-DENABLED_LOCAL_INFILE=1 \
+-DMYSQL_DATADIR=/usr/local/mysql/data \
+-DMYSQL_USER=mysql \
+-DMYSQL_TCP_PORT=3306
 </pre>
 </body>
 </html>
