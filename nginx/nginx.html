@@ -1,3 +1,22 @@
+<!DOCTYPE html>
 <html>
-</html>
+<head>
+<meta charset="UTF-8" />
+<title>nginx</title>
+</head>
+<body>
+<pre>
+官网：<a href="http://nginx.org/" target="blank">http://nginx.org/</a>
 
+源码安装：
+$ yum install gcc pcre-devel openssl-devel
+$ tar zxvf nginx-VERSION.tar.gz
+$ cd nginx-VERSION
+$ ./configure --prefix=/usr/local/nginx --with-http_ssl_module
+$ make
+$ sudo make install
+
+
+</pre>
+</body>
+</html>

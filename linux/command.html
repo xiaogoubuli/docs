@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title></title>
+</head>
+<body>
+<pre>
+$ ls [选项]... [文件]...
+-a 显示隐藏文件
+-l 显示长格式
+-h 显示人性化大小
+-d 显示目录信息
+-i 显示inode号
+示例：
+$ ls -alh / /etc
+$ ls -d /etc
+$ ls -i /
+
+$ mkdir [选项]... 目录...
+-p 递归创建
+示例：
+$ mkdir -p /tmp/a/b/c
+$ mkdir /tmp/a /tmp/b /tmp/c
+
+$ cd [-L|-P] [目录]
+示例：
+$ cd ..
+$ cd -
+$ cd
+$ cd ~
+
+$ pwd
+
+$ rmdir [选项]... 目录...
+
+cp -rp src dest
+
+mv src dest
+
+clear ctrl+l
+
+rm -rf dest
+rm -rf *
+
+touch filename
+
+cat -n filename
+
+tac filename
+
+more filename
+	空格或f 翻下页
+	b 翻上页
+	回车 换行
+	q或Q 退出
+
+less filename
+
+head -n number filename
+
+tail -n number filename
+tail -f filename
+
+ln -s src dest
+	硬链接 同步更新，通过i节点识别，不能跨分区，不能对目录使用硬链接
+
+chmod -R 777 fileordirname
+
+chown username fileordirname
+
+chgrp groupname fileordirname
+
+umask -S
+umask 022
+
+find range condition
+find / -name filename
+find / -iname filename
+find / -size +1024
+find / -size 1024
+find / -size -1024
+find / -user username
+find / -group groupname
+find / -amin -5
+find / -cmin -5
+find / -mmin -5
+find / -size +1111 -a -size -333333
+find / -size +1111 -o -size -333333
+find / -name filename -exec ls -l {} \;
+find / -name filename -ok {} \;
+-type f|d|l
+-inum
+find / -inum 12345 -exec rm {} \;
+
+locate -i filename
+updatedb
+
+which cmd
+whereis cmd
+grep -iv string filename
+grep root /etc/passwd
+
+man cmd/conf
+man ls
+man services
+man 5 passwd # 1 - cmd, 5 - conf
+
+whatis cmd
+apropos conf
+whatis ls
+apropos services
+
+cmd --help
+ls --help
+
+info
+
+help buidincmd
+help shellscript
+help umask
+help if
+
+useradd -udcgGs username
+useradd -u 888 -G root,bin -c "Test User" -d /home/testuser -s /bin/bash testuser
+usermod -ducgGsLU username
+passwd -Slu username
+passwd
+echo "password" | passwd --stdin username
+chage -ldmMWIE username
+chage -d 0 username
+userdel -r username
+id username
+su - username
+su - root -c "useradd test"
+
+groupadd -g groupname
+groupmod -gn groupname
+groupmod -n newgroupname oldgroupname
+groupdel groupname
+gpasswd -ad groupname
+
+who
+w
+
+uptime
+
+gzip filename
+gunzip filename
+gzip -d filename
+
+tar -zcvf destfilename dirname
+tar -zxvf filename
+
+zip destfilename filename
+zip -r destfilename dirname
+
+unzip filename
+
+bzip2 -k filename
+tar -cjf destfilename dirname
+bunzip2 -k filename
+tar -xjf filename
+
+write username
+Ctrl+d
+
+wall message
+
+ping -c number ip
+
+ifconfig ethname ip
+ifconfig
+
+mail username
+mail
+
+last
+
+lastlog -u uid
+
+traceroute domain
+
+netstat
+netstat -tlun
+netstat -an
+netstat -rn
+
+setup
+
+mount -t devfilename name
+mount /dev/sr0 /mnt/cdrom
+umount /dev/sr0
+
+shutdown -hrc time
+shutdown -h now
+shutdown -r now
+shutdown -c
+halt
+poweroff
+init 0
+reboot
+init 6
+runlevel
+logout
+
+rpm -ivh pkgfullname
+rpm -Uvh pkgfullname
+rpm -v pkgname
+rpm -q pkgname
+rpm -qa
+rpm -qa | grep name
+rpm -qi pkgname
+rpm -qip pkgfullname
+rpm -ql pkgname
+rpm -qlp pkgfullname
+rpm -qf filename
+rpm -qR pkgname
+rpm -qRp pkgfullname
+rpm -V pkgname
+
+rpm2cpio pkgfullname | cpio -idv .filename
+
+yum list
+yum search pkgname
+yum -y install pkgname
+yum -y update pkgname
+yum -y remove pkgname
+yum grouplist
+yum groupinstall pkggroupname
+yum groupremove pkggroupname
+
+du -sh dirname
+
+./configure
+make
+make clean
+make install
+
+date -d "1970-01-01 16066 days"
+echo $(($(date --date="2014/04/13" +%s)/86400+1))
+
+df -h
+du -sh dirname
+fsck
+dumpe2fs -h /dev/sda3
+mount
+mount -la
+mount -t filesystem -L labelname -o opt devfilename mnt
+mount -o remount,acl /
+vi /etc/fstab
+mount -o remount /
+mount -o remount,rw /
+setfacl -mxbdkR filename
+setfacl -m u:username:rwx /www/
+setfacl -m g:groupname:rwx /www/
+setfacl -m m:rwx /www/
+getfacl filename
+setfacl -x g:groupname /www/
+setfacl -x u:username /www/
+setfacl -b /www/
+setfacl -m u:username:rwx -R dirname
+setfacl -m d:u:username:rwx dirname
+
+chmod 4755 filename
+chmod u+s filename
+chmod g+s fileordirname
+chmod o+t dirname
+chmod o-t dirname
+chmod 1777 dirname
+
+chattr +-= ia fileordirname
+lsattr -ad filename
+
+visudo
+sudo -l
+sudo cmd
+
+telnet hostname port
+netstat -na
+
+fdisk -l
+mount -t vfat /dev/sdb1 /mnt/usb
+
+fdisk /dev/sdb
+partprobe
+
+mkfs -t ext4 /dev/sdb1
+
+history -cw
+
+alias
+alias vi="vim"
+vi ~/.bashrc
+unalias vi
+</pre>
+</body>
+<html>
