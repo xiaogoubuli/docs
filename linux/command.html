@@ -7,6 +7,7 @@
 <body>
 <pre>
 $ ls [选项]... [文件]...
+列表信息
 -a 显示隐藏文件
 -l 显示长格式
 -h 显示人性化大小
@@ -18,12 +19,14 @@ $ ls -d /etc
 $ ls -i /
 
 $ mkdir [选项]... 目录...
+创建新目录
 -p 递归创建
 示例：
 $ mkdir -p /tmp/a/b/c
 $ mkdir /tmp/a /tmp/b /tmp/c
 
 $ cd [-L|-P] [目录]
+切换工作目录
 示例：
 $ cd ..
 $ cd -
@@ -31,19 +34,38 @@ $ cd
 $ cd ~
 
 $ pwd
+显示当前工作路径
 
 $ rmdir [选项]... 目录...
+删除空目录
 
-cp -rp src dest
+$ cp [选项]... 源... 目录
+复制文件或目录
+-r 复制目录
+-p 保留文件属性
+示例：
+$ cp -rp /etc/src /tmp
 
-mv src dest
+$ mv [选项]... 源... 目录
+剪切或重命名
+示例：
+$ mv /etc/src /tmp
 
-clear ctrl+l
+$ clear 或快捷键 CTRL + L
+清屏
 
-rm -rf dest
-rm -rf *
+$ rm [选项]... 文件...
+删除文件
+-r 删除目录
+-f 强制删除
+示例：
+$ rm -rf /tmp/abc
+$ rm -rf *
 
-touch filename
+$ touch [选项]... 文件...
+创建空文件，更新访问与修改时间
+示例：
+$ touch /tmp/test
 
 cat -n filename
 
