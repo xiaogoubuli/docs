@@ -67,22 +67,43 @@ $ touch [选项]... 文件...
 示例：
 $ touch /tmp/test
 
-cat -n filename
+$ cat [选项]... 文件...
+显示文件内容
+-n 显示行号
+示例：
+$ cat -n /etc/issue
 
-tac filename
+$ tac [选项]... 文件...
+反向列示文件内容
+示例：
+$ tac /etc/issue
 
-more filename
-	空格或f 翻下页
-	b 翻上页
-	回车 换行
-	q或Q 退出
+$ more 文件
+分页显示文件内容
+空格或f 下一页
+b       上一页
+回车    下一行
+q或Q    退出
+示例：
+$ more /etc/services
 
-less filename
+$ less 文件
+同more，另有上下左右滚动、翻页及搜索等功能
+示例：
+$ less /etc/services
 
-head -n number filename
+$ head [选项]... [文件]...
+显示文件的前几行（默认前10行）
+-n 指定行数
+示例：
+$ head -n 20 /etc/services
 
-tail -n number filename
-tail -f filename
+$ tail [选项]... [文件]...
+显示文件的后几行（默认后10行）
+-f 动态显示文件末尾内容
+示例：
+$tail -n 20 /etc/services
+tail -f /var/log/messages
 
 ln -s src dest
 	硬链接 同步更新，通过i节点识别，不能跨分区，不能对目录使用硬链接
