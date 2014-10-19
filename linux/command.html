@@ -105,17 +105,47 @@ $ tail [选项]... [文件]...
 $tail -n 20 /etc/services
 tail -f /var/log/messages
 
-ln -s src dest
+$ ln [选项]... 目标 链接名
+-s 创建软链接
+示例：
+$ ln -s /etc/issue /tmp/issue.sotf
+$ ln /etc/issue /tmp/issue.hard
 	硬链接 同步更新，通过i节点识别，不能跨分区，不能对目录使用硬链接
 
-chmod -R 777 fileordirname
+$ chmod [选项]... 模式... 文件...
+更改文件的权限
+-R 递归
+模式 [ugoa]*([-+=]([rwxXst]*|[ugo]))+
+示例：
+$ chmod u+x,g-w,o=rwx /tmp
+$ chmod 644 /tmp
+$ chmod -R 777 /tmp
+  文件 目录
+r 读   文件列表
+w 写   创建删除文件
+x 执行 进入目录
 
-chown username fileordirname
+# chown [选项]... [所有者][:[所有组]] 文件...
+改变文件的所有者或所属组
+示例：
+# chown root /tmp
+# chown :root /tmp
+# chown root: /tmp
+# chown root:root /tmp
 
-chgrp groupname fileordirname
+# chgrp [选项]... 所属组 文件...
+改变文件的所属组
+示例：
+# chgrp root /tmp
 
-umask -S
-umask 022
+$ umask [-p] [-S] [模式]
+显示设置文件的缺省权限
+-S 以rwx形式显示新文件的缺省权限
+示例：
+$ umask
+0002
+$ umask -S
+$ umask 0022
 
 find range condition
 find / -name filename
