@@ -147,17 +147,36 @@ $ umask
 $ umask -S
 $ umask 0022
 
-find range condition
-find / -name filename
-find / -iname filename
-find / -size +1024
-find / -size 1024
-find / -size -1024
-find / -user username
-find / -group groupname
-find / -amin -5
-find / -cmin -5
-find / -mmin -5
+$ find  [路径...] [表达式]
+文件搜索
+-name 匹配文件名
+-iname 忽略文件名大小写
+* 匹配任意字符
+? 匹配单个字符
+-size 匹配文件大小
+  -数值 小于数值（数值单位为数据块：1数据块为512字节，即0.5K）
+   数值 等于数值
+  +数值 大于数值
+-user 查询指定所有者的文件
+-group 查询指定所属组的文件
+-amin 访问时间
+-cmin 文件属性
+-mmin 文件内容
+ -时间 小于指定时间（单位：分钟）
+ +时间 大于指定时间
+示例：
+$ find /etc -name init
+$ find /etc -iname init
+$ find /etc -name *init*
+$ find /etc -name init???
+$ find / -size +2048
+$ find / -size 2048
+$ find / -size -2048
+$ find /home -user root
+$ find /home -group root
+$ find /etc -amin -5
+$ find /etc -cmin -5
+4 find /etc -mmin -5
 find / -size +1111 -a -size -333333
 find / -size +1111 -o -size -333333
 find / -name filename -exec ls -l {} \;
