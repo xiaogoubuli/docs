@@ -159,11 +159,20 @@ $ find  [路径...] [表达式]
   +数值 大于数值
 -user 查询指定所有者的文件
 -group 查询指定所属组的文件
--amin 访问时间
--cmin 文件属性
--mmin 文件内容
+-amin 访问时间access
+-cmin 文件属性change
+-mmin 文件内容modify
  -时间 小于指定时间（单位：分钟）
  +时间 大于指定时间
+-a 两个条件同时满足and
+-o 两个条件满足任意一个or
+-type 根据文件类型查找
+ f 文件
+ d 目录
+ l软链接
+-inum 根据i节点查找
+-exec 命令 {} \; 对搜索结果执行指定命令的操作
+-ok 命令 {} \; 对搜索结果执行指定命令的操作，执行前需要确认
 示例：
 $ find /etc -name init
 $ find /etc -iname init
@@ -176,14 +185,15 @@ $ find /home -user root
 $ find /home -group root
 $ find /etc -amin -5
 $ find /etc -cmin -5
-4 find /etc -mmin -5
-find / -size +1111 -a -size -333333
-find / -size +1111 -o -size -333333
-find / -name filename -exec ls -l {} \;
-find / -name filename -ok {} \;
--type f|d|l
--inum
-find / -inum 12345 -exec rm {} \;
+$ find /etc -mmin -5
+$ find / -size +1111 -a -size -333333
+$ find / -size +1111 -o -size -333333
+$ find / -name inittab -exec ls -l {} \;
+$ find / -name inittab -ok rm {} \;
+$ find / -inum 12345 -exec rm {} \;
+$ find /etc -type f
+$ find /etc -type d
+$ find /etc -type l
 
 locate -i filename
 updatedb
