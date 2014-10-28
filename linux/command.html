@@ -195,12 +195,30 @@ $ find /etc -type f
 $ find /etc -type d
 $ find /etc -type l
 
-locate -i filename
-updatedb
+$ yum install mlocate
+$ locate [选项]... [匹配模式]...
+-i 不区分大小写
+示例：
+$ locate -i inittab
+$ updatedb
 
-which cmd
-whereis cmd
-grep -iv string filename
+$ which [选项] [--] 命令 [...]
+输出命令的完整路径及别名信息
+示例：
+$ which ls
+
+$ whereis 命令
+显示命令的完整路径及帮助文档的路径
+示例：
+$ whereis ls
+
+$ grep [选项]... 模式 [文件]...
+在文件中搜索匹配指定模式的字符串行并输出显示
+-i 不区分大小写
+-v 排除匹配的字符串
+示例：
+$ grep -i multiuser /etc/inittab
+$ grep -v ^# /etc/inittab
 grep root /etc/passwd
 
 man cmd/conf
