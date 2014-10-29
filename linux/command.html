@@ -221,25 +221,40 @@ $ grep -i multiuser /etc/inittab
 $ grep -v ^# /etc/inittab
 grep root /etc/passwd
 
-man cmd/conf
-man ls
-man services
-man 5 passwd # 1 - cmd, 5 - conf
+$ yum install man man-pages
+$ man 命令 ...
+查看命令或配置文件的帮助
+示例：
+$ man ls
+$ man services
+1 命令的帮助
+5 配置文件的帮助
+$ man 5 passwd
 
-whatis cmd
-apropos conf
-whatis ls
-apropos services
+$ makewhatis
+$ whatis 命令 ...
+查看命令的简短信息
+示例：
+$ whatis ls
+$ apropos 配置文件 ...
+查看配置文件的简短信息
+示例：
+$ apropos inittab
 
-cmd --help
-ls --help
+$ 命令 --help
+示例：
+$ ls --help
 
-info
+$ info [选项]... [菜单项...]
+示例：
+$ info ls
 
-help buidincmd
-help shellscript
-help umask
-help if
+$ help 内置命令
+查看内置命令的帮助
+示例：
+$ help cd
+$ help umask
+$ help if
 
 useradd -udcgGs username
 useradd -u 888 -G root,bin -c "Test User" -d /home/testuser -s /bin/bash testuser
