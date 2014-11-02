@@ -256,11 +256,17 @@ $ help cd
 $ help umask
 $ help if
 
-useradd -udcgGs username
-useradd -u 888 -G root,bin -c "Test User" -d /home/testuser -s /bin/bash testuser
+$ useradd [选项] 用户名
+示例：
+$ useradd -udcgGs username
+$ useradd -u 888 -G root,bin -c "Test User" -d /home/testuser -s /bin/bash testuser
 usermod -ducgGsLU username
-passwd -Slu username
-passwd
+
+$ passwd [选项...] <用户名>
+示例：
+$ passwd -Slu username
+$ passwd
+
 echo "password" | passwd --stdin username
 chage -ldmMWIE username
 chage -d 0 username
@@ -275,27 +281,70 @@ groupmod -n newgroupname oldgroupname
 groupdel groupname
 gpasswd -ad groupname
 
-who
-w
+$ who [选项]... [文件 | 参数1 参数2]
+输出当前所有登录用户的信息
+tty 本地终端
+pts 远程终端
+示例：
+$ who
+
+$ w -hlsufV [用户名]
+输出当前所有登录用户的详细信息
+示例：
+$ w
+up 服务器连续运行时间
 
 uptime
 
-gzip filename
-gunzip filename
-gzip -d filename
+$ gzip [选项]... [文件]...
+压缩或解压缩文件，不能压缩目录，不保留原文件
+-d 解压缩
+示例：
+$ gzip filename
+$ gzip -d filename
 
-tar -zcvf destfilename dirname
-tar -zxvf filename
+$ gunzip 文件
+解压缩文件
+$ gunzip filename
 
-zip destfilename filename
-zip -r destfilename dirname
+$ tar [选项...] [文件]...
+打包文件
+-c 打包
+-x 解包
+-v 显示详细信息
+-f 指定文件名
+-z zip压缩解压缩
+-j bzip2压缩解压缩
+示例：
+$ tar -cvf tmp.tar /tmp
+$ tar -zcvf tmp.tar.gz /tmp
+$ tar -zxvf tmp.tar.gz
+$ tar -cvfj tmp.tar.bz2 /tmp
+$ tar -xvfj tmp.tar.bz2
 
-unzip filename
+$ zip [-选项] []
+压缩文件或目录
+-r 压缩目录
+示例：
+$ zip test.zip /tmp/test
+$ zip -r tmp.zip /tmp
 
-bzip2 -k filename
-tar -cjf destfilename dirname
-bunzip2 -k filename
-tar -xjf filename
+$ unzip 文件
+解压缩文件
+示例：
+$ unzip tmp.zip
+
+$ bzip2 文件
+压缩文件
+-k 压缩后保留源文件
+示例：
+$ bzip2 -k test.bz2 /tmp/test
+
+$ bunzip2 文件
+解压缩文件
+-k 压缩后保留源文件
+示例：
+$ bunzip2 -k test.bz2
 
 write username
 Ctrl+d
