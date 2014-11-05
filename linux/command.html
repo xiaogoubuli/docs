@@ -346,29 +346,71 @@ $ bunzip2 文件
 示例：
 $ bunzip2 -k test.bz2
 
-write username
-Ctrl+d
+$ write 用户名 [tty]
+给在线用户发送信息
+CTRL + D 保存结束
+示例：
+$ write root
 
-wall message
+$ wall [信息]
+给所有在线用户发送信息
+CTRL + D 保存结束
+示例：
+$ wall hello...
+$ wall
+hello...
 
-ping -c number ip
+$ ping [-c 次数] IP地址
+测试网络通路
+-c 指定发送次数
+示例：
+$ ping 192.168.1.1
+$ ping -c 3 192.168.1.1
 
-ifconfig ethname ip
-ifconfig
+$ ifconfig 网卡名 IP地址
+查看或设置网卡
+示例：
+$ ifconfig
+$ ifconfig eth0 192.168.1.2
 
-mail username
-mail
+$ mail [用户名]
+查看或发送电子邮件
+示例：
+$ mail root
+Subject: hello
+word
+CTRL + D
+$ mail
+& 序号 查看指定序号邮件
+& d 序号
+& h 
+& q 退出
+& help 帮助信息
 
-last
+$ last
+列出系统用户所有的登入信息
+示例：
+$ last
 
-lastlog -u uid
+$ lastlog [选项]
+列出系统所有用户的最后登录信息
+-u 用户UID
+示例：
+$ lastlog
+$ lastlog -u 502
 
-traceroute domain
+$ traceroute
+显示数据包到主机之间的通路
+示例：
+$ traceroute www.baidu.com
 
-netstat
-netstat -tlun
-netstat -an
-netstat -rn
+$ netstat [选项]
+显示网络信息
+示例：
+$ netstat
+$ netstat -tlun
+$ netstat -an
+$ netstat -rn
 
 setup
 
