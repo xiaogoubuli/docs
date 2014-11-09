@@ -37,6 +37,10 @@ EOF
 
 
 关闭：
+关闭监听
+SQL> ALTER SYSTEM CHECKPOINT;
+SQL> SHUTDOWN IMMEDIATE;
+
 管理：
 导入dmp：
 $ imp 用户名/密码@主机名或ip/实例名 file=文件路径名 full=y
@@ -50,6 +54,9 @@ SQL> conn / as sysdba
 或直接
 $ sqlplus / as sysdba
 SQL> ALTER USER sys IDENTIFIED BY 12345678;
+
+监听：
+/data/oracle/product/11.2.0/db_1/network/admin/listener.ora
 
 优化：
 
