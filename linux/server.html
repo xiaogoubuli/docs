@@ -21,12 +21,16 @@ Chinese Support
 
 添加组
 
+
 添加用户
 # useradd server
 # passwd server
 
+
 添加sudo
 # visudo
+server  ALL=(ALL)   ALL
+
 
 修改IP
 $ sudo vi /etc/sysconfig/network-scripts/ifcfg-eth0
@@ -39,8 +43,80 @@ DNS1=8.8.8.8
 DNS2=8.8.4.4
 
 $ sudo ifup eth0
+$ ifconfig
 
-本地yum源
+
+修改hostname
+$ sudo vi /etc/sysconfig/network
+HOSTNAME=www.j2ee.org
+
+$ sudo vi /etc/hosts
+127.0.0.1   localhost www.j2ee.org
+
+$ sudo shutdown -r now
+$ hostname
+
+
+配置本地yum源
+$ sudo mkdir /data/iso /mnt/dvd1 /mnt/dvd2
+$ ls /data/iso
+CentOS-6.6-x86_64-bin-DVD1.iso
+CentOS-6.6-x86_64-bin-DVD2.iso
+
+$ sudo mount -o loop /data/iso/CentOS-6.6-x86_64-bin-DVD1.iso /mnt/dvd1
+$ sudo mount -o loop /data/iso/CentOS-6.6-x86_64-bin-DVD2.iso /mnt/dvd2
+
+$ sudo mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+$ sudo mv /etc/yum.repos.d/CentOS-Debuginfo.repo /etc/yum.repos.d/CentOS-Debuginfo.repo.bak
+$ sudo vi /etc/yum.repos.d/CentOS-Media.repo
+baseurl=file:///mnt/dvd1
+        file:///mnt/dvd2
+gpgcheck=0
+enabled=1
+
+$ sudo yum install vim
+
+
+设置开机自动挂载ISO镜像
+$ sudo vi /etc/rc.d/init.d/mountiso
+#!/bin/sh
+# auto mount iso
+mount -o loop /data/iso/CentOS-6.6-x86_64-bin-DVD1.iso /mnt/dvd1
+mount -o loop /data/iso/CentOS-6.6-x86_64-bin-DVD2.iso /mnt/dvd2
+
+$ sudo chmod 755 /etc/rc.d/init.d/mountiso
+$ sudo ln -s /etc/rc.d/init.d/mountiso /etc/rc.d/rc3.d/S96mountiso
+$ sudo ln -s /etc/rc.d/init.d/mountiso /etc/rc.d/rc5.d/S96mountiso
+
+
+
+
+配置VNC
+$ sudo yum install tigervnc-server
+$ sudo yum groupinstall Desktop
+$ vncpasswd
+$ sudo vim /etc/sysconfig/vncservers
+VNCSERVERS="1:server"
+VNCSERVERARGS[1]="-geometry 800x600 -localhost"
+
+$ sudo service vncserver start
+$ sudo chkconfig vncserver on
+
+PuTTY配置
+Connection -> SSH -> Tunnels -> Add
+Source port: 5901
+Destination: loclahost:5901
+
+Xshell配置
+连接 -> SSH -> 隧道 -> 添加
+侦听端口：5901
+目标端口：5901
+
+VNC Viewer
+localhost:1
+
+
+
 
 </pre>
 </body>
