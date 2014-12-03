@@ -20,6 +20,17 @@ $ sqlplus / as sysdba
 SQL> startup
 SQL> quit
 
+脚本启动：
+$ vi startdb.sh
+echo "Start Database ..."
+sqlplus / as sysdba <<EOF
+startup
+quit
+EOF
+lsnrctl start
+echo "Database started."
+exit
+
 自动启动：
 vi /etc/rc.local
 su - oracle <<EOF
@@ -37,9 +48,25 @@ EOF
 
 
 关闭：
-关闭监听
+手动关闭：
+$ lsnrctl stop
 SQL> ALTER SYSTEM CHECKPOINT;
 SQL> SHUTDOWN IMMEDIATE;
+
+脚本关闭：
+$ vim stopdb.sh
+echo "Stop database ..."
+lsnrctl stop
+sqlplus / as sysdba <<EOF
+alter system checkpoint;
+shutdown immediate;
+quit
+EOF
+echo "Database stopped."
+exit
+
+自动关闭：
+
 
 管理：
 导入dmp：
