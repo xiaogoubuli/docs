@@ -421,6 +421,8 @@ $ setup
 
 $ mount -t 类型 设备文件名 目录（挂载点）
 挂载命令
+示例：
+$ mount
 $ mount -t iso9660 /dev/sr0 /mnt/cdrom
 $ mount -t iso9660 /dev/cdrom /mnt/cdrom
 $ mount /dev/sr0 /mnt/cdrom
@@ -453,22 +455,65 @@ $ runlevel
 $ logout
 退出登录
 
-rpm -ivh pkgfullname
-rpm -Uvh pkgfullname
-rpm -v pkgname
-rpm -q pkgname
-rpm -qa
-rpm -qa | grep name
-rpm -qi pkgname
-rpm -qip pkgfullname
-rpm -ql pkgname
-rpm -qlp pkgfullname
-rpm -qf filename
-rpm -qR pkgname
-rpm -qRp pkgfullname
-rpm -V pkgname
+www.rpmfind.net
 
-rpm2cpio pkgfullname | cpio -idv .filename
+包全名
+包名
+/var/lib/rpm
+
+$ rpm [选项...]
+-i 安装包
+-v 输出详细信息
+-h 显示安装进度
+-U 升级包
+-e 卸载
+-q 查询
+-a 所有包
+-p 包文件信息
+-R 列表包依赖
+-l 列表包中的文件
+-f 文件所属包
+-V 校验包文件
+--nodeps 不检查包依赖
+示例：
+$ rpm -ivh 包全名
+$ rpm -Uvh 包全
+$ rpm -q 包全
+$ rpm -qa
+$ rpm -qa | grep httpd
+$ rpm -qi 包名（查询已安装包信息）
+$ rpm -qip 包全名（查询未安装包信息）
+$ rpm -ql 包名（查询已安装包的安装位置）
+$ rpm -qlp 包全名（查询未安装包的安装位置）
+$ rpm -qf 文件名（查询文件所属的包）
+$ rpm -qR 包名（查询已安装包的依赖包）
+$ rpm -qRp 包全名（查询未安装包的依赖包）
+$ rpm -V 包名（校验包信息，校验内容如下）
+S 文件大小是否改变
+M 文件的类型或权限是否改变
+5 文件MD5校验和是否改变
+D 代码是否改变
+L 文件路径是否改变
+U 文件的所有者是否改变
+G 文件的所属组是否改变
+T 文件的修改时间是否改变
+文件类型：
+c 配置文件
+d 普通文件
+g 鬼文件
+l 授权文件
+r 描述文件
+rpm -v pkgname
+
+$ rpm2cpio 包全名 | cpio -idv .文件路径名
+从RPM包中提取文件
+示例：
+
+$ cpio [选项...] [目标目录]
+从存档文件中复制文件或复制文件到存档文件中
+-i 从存档文件中提取文件
+-d 自动创建目录
+-v 显示过程
 
 yum list
 yum search pkgname
