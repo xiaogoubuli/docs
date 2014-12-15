@@ -257,29 +257,120 @@ $ help umask
 $ help if
 
 $ useradd [选项] 用户名
+-u 指定用户的UID
+-d 指定用户的家目录
+-c 指定用户的说明
+-g 指定用户的初始组
+-G 指定用户的附加组
+-s 指定用户的登录Shell，默认/bin/bash
 示例：
-$ useradd -udcgGs username
 $ useradd -u 888 -G root,bin -c "Test User" -d /home/testuser -s /bin/bash testuser
-usermod -ducgGsLU username
+
+$ cat /etc/default/useradd
+GROUP=100 （默认组）
+HOME=/home （家目录）
+INACTIVE=-1 （密码过期宽限天数）
+EXPIRE= （密码失效时间）
+SHELL=/bin/bash （登录Shell）
+SKEL=/etc/skel （模板目录）
+CREATE_MAIL_SPOOL=yes （是否创建邮箱）
+
+$ cat /etc/login.defs
+MAIL_DIR	/var/spool/mail
+PASS_MAX_DAYS	99999 （密码有效期）
+PASS_MIN_DAYS	0 （密码修改间隔）
+PASS_MIN_LEN	5 （密码最小长度）
+PASS_WARN_AGE	7 （密码修改到期前的警告天数）
+UID_MIN			  500 （最小UID）
+UID_MAX			60000 （最大UID）
+GID_MIN			  500 （最小GID）
+GID_MAX			60000 （最大GID）
+CREATE_HOME	yes
+UMASK           077
+USERGROUPS_ENAB yes
+ENCRYPT_METHOD SHA512 （加密算法）
+
+$ usermod [选项] 用户名
+-d 修改用户的家目录
+-u 修改用户的UID
+-c 修改用户的说明
+-g 修改用户的初始组
+-G 修改用户的附加组
+-s 修改用户的登录Shell
+-L 临时锁定用户
+-U 解锁用户
+示例：
+$ sudo usermod root
+$ sudo usermod -c "Test User" -G root,bin -u 555 testuser
+
+$ sudo usermod -L testuser
+$ sudo usermod -U testuser
 
 $ passwd [选项...] <用户名>
+-S 查询用户密码状态
+-l 暂时锁定用户
+-u 解锁用户
+--stdin 使用管道符输出的数据作为用户的密码
 示例：
-$ passwd -Slu username
 $ passwd
+$ sudo passwd root
+$ sudo passwd -S root
+$ echo "123" | passwd --stdin root
 
-echo "password" | passwd --stdin username
-chage -ldmMWIE username
-chage -d 0 username
-userdel -r username
-id username
-su - username
-su - root -c "useradd test"
+$ chage [选项] [用户名]
+修改用户密码状态
+-l 列出用户密码详细状态
+-d 修改密码最后一次更新日期
+-m 两次密码修改间隔
+-M 密码有效期
+-W 密码过期前警告天数
+-I 密码到期后宽限天数
+-E 账号失效时间
+示例：
+$ sudo chage -l root
+$ sudo chage -d 0 testuser
 
-groupadd -g groupname
-groupmod -gn groupname
-groupmod -n newgroupname oldgroupname
-groupdel groupname
-gpasswd -ad groupname
+$ userdel [选项] 用户名
+-r 删除用户家目录和邮箱目录
+示例：
+$ sudo userdel -r testuser
+
+$ id [选项]... [用户名]
+输出当前用户或指定用户的UID、GID和组信息
+示例：
+$ id root
+
+$ su [选项]... [-] [用户名 [参数]...]
+切换用户
+[-] 切换环境变量
+-c 只执行一次命令，不切换用户
+示例：
+$ su - root -c "useradd test"
+
+$ whoami
+$ env
+
+$ groupadd [选项] 组名
+-g 指定GID
+示例：
+$ groupadd -g 555 testgroup
+
+$ groupmod [选项] 组名
+-g 修改GID
+-n 修改组名
+示例：
+$ groupmod -n newgroupname oldgroupname
+
+$ groupdel 组名
+示例：
+$ groupdel testgroup
+
+$ gpasswd [选项] 组名
+-a 向组中添加用户
+-d 从组中删除用户
+示例:
+$ gpasswd -a testuser testgroup
+$ gpasswd -d testuser testgroup
 
 $ who [选项]... [文件 | 参数1 参数2]
 输出当前所有登录用户的信息
