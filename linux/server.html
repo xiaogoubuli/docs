@@ -68,10 +68,10 @@ $ sudo mount -o loop /data/iso/CentOS-6.6-x86_64-bin-DVD2.iso /mnt/dvd2
 
 $ sudo mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 $ sudo mv /etc/yum.repos.d/CentOS-Debuginfo.repo /etc/yum.repos.d/CentOS-Debuginfo.repo.bak
+$ sudo mv /etc/yum.repos.d/CentOS-Vault.repo /etc/yum.repos.d/CentOS-Vault.repo.bak
 $ sudo vi /etc/yum.repos.d/CentOS-Media.repo
 baseurl=file:///mnt/dvd1
         file:///mnt/dvd2
-gpgcheck=0
 enabled=1
 
 $ sudo yum install vim
