@@ -657,22 +657,46 @@ echo $(($(date --date="2014/04/13" +%s)/86400+1))
 把日期换算为时间戳
 
 
-df -h
-du -sh dirname
-fsck
-dumpe2fs -h /dev/sda3
+$ df -h
+$ du -sh dirname
+$ fsck
+
+
+
+$ dumpe2fs -h /dev/sda3
+查询指定分区详细文件系统信息
+-h 仅显示超级块中的信息
+
+
 mount
 mount -la
 mount -t filesystem -L labelname -o opt devfilename mnt
 mount -o remount,acl /
-vi /etc/fstab
-mount -o remount /
+临时开启分区ACL权限
+$ vi /etc/fstab
+deaults,acl
+$ mount -o remount /
+重新挂载根分区
 mount -o remount,rw /
-setfacl -mxbdkR filename
-setfacl -m u:username:rwx /www/
-setfacl -m g:groupname:rwx /www/
-setfacl -m m:rwx /www/
-getfacl filename
+
+$ setfacl [-bkndRLP] { -m|_M|-x|-X ... } 文件 ...
+-m 设定ACL权限
+-x 删除指定的ACL权限
+-b 删除所有的ACL权限
+-d 设定默认的ACL权限
+-k 删除默认的ACL权限
+-R 递归设定ACL权限
+示例：
+$ setfacl -m u:用户名:rwx 文件或目录名
+setfacl -m g:组名:rwx 文件或目录名
+$ setfacl -m m:rwx 文件或目录名
+设定最大有效权限
+
+$ getfacl 文件或目录名
+查看文件或目录的ACL权限
+示例：
+$ getfacl /
+
 setfacl -x g:groupname /www/
 setfacl -x u:username /www/
 setfacl -b /www/
