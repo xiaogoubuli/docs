@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="antProj" basedir="." default="init">
+    <description>Ant Build</description>
+
+    <property name="build" location="build" />
+    <property name="src" location="${build}/src" />
+    <property name="lib" location="${build}/lib" />
+    <property name="classes" location="${build}/classes" />
+    <property name="test.classes" location="${build}/class" />
+    <property name="docs" location="${build}/docs/api" />
+    <property name="dist" location="${build}/dist" />
+    <property name="project.name" value="" />
+    <property name="version" value="" />
+    <property name="zip.dir" location="${build}/zip" />
+    <property name="zip.name" value="test-${version}.zip" />
+    
+    <!-- <property name="test.class" value="org.j2ee.Test" /> -->
+    <property name="test.class" value="**/Test*" />
+
+    <!-- <property file="build.properties" /> -->
+
+    <property environment="env" />
+    
+    <path id="lib-path">
+        <fileset dir="${lib}" includes="*.jar" />
+    </path>
+    
+    <path id="test-lib-path">
+        <path refid="lib-path" />
+        <pathelement location="${classes}" />
+    </path>
+    
+    <path id="test-path">
+        <path refid="test-lib-path" />
+        <pathelement location="${classes}" />
+    </path>
+
+    <fileset id="src.path" dir="src" include="**/*.*" />
+
+    <target name="test">
+        <echo>${ant.home}</echo>
+        <echo>${ant.version}</echo>
+        <echo>${ant.file}</echo>
+        <echo>${ant.java.version}</echo>
+        <echo>${ant.project.name}</echo>
+        <echo>${basedir}</echo>
+        <echo>${env.CATALINA_HOME}</echo>
+        <echo>${env.OS}</echo>
+    </target>
+
+    <target name="clean" description="">
+        <echo>Clean ...</echo>
+        <delete dir="${build}" />
+    </target>
+
+    <!--  -->
+    <target name="init" description="">
+        <echo>Init ...</echo>
+        <mkdir dir="${build}" />
+        <mkdir dir="${src}" />
+        <mkdir dir="${classes}" />
+        <mkdir dir="${dist}" />
+        <!-- <delete dir="/a" />
+        <delete file="text.txt" />
+        <copy file="" tofile="" />
+        <move file="" tofile="" />
+        <copy file="" todir="" />
+        <move file="" todir="" />
+        <copy todir="archive">
+            <fileset dir="src">
+                <include name="**/*.java" />
+                <exclude name="" />
+            </fileset>
+        </copy> -->
+    </target>
+    
+    <target name="copy" depends="init">
+        <copy todir="${src}">
+            <fileset refid="src.path" />
+        </copy>
+    </target>
+
+    <target name="compile" depends="init,clean" description="">
+        <!-- classpath="" debug="true" -->
+        <javac failonerror="true" includeantruntime="true" srcdir="${src}" destdir="${classes}" classpathref="lib-path" />
+        <!-- <java classpath="." classname="Test" /> -->
+    </target>
+    
+    <target name="test" depends="compile">
+        <junit printsummary="false" haltonfailure="true">
+            <classpath refid="test-path" />
+            <formatter type="brief" usefile="false" />
+            <!-- <test name="${test.class}"></test> -->
+            <formatter type="xml" />
+            <batchtest>
+                <fileset dir="${test.classes}" includes="${test.class}" />
+            </batchtest>
+        </junit>
+        <junitreport todir="${report}">
+            <fileset dir="${report}" includes="TEST-*.xml" />
+            <report format="frames" todir="${report}/html" />
+        </junitreport>
+    </target>
+
+    <target name="package" depends="compile" description="">
+        <tstamp />
+        <!-- DSTAMP:yyyymmdd TSTAMP:hhmm TODAY:yyyy年mm月dd日 -->
+        <jar destfile="${dist}/test-${DSTAMP}.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="org.j2ee.util.Test" />
+            </manifest>
+        </jar>
+    </target>
+    
+    <target name="doc" depends="compile">
+        <javadoc sourcepath="${src}" packagenames="org.j2ee.*" destdir="${doc}" charset="UTF-8" docencoding="UTF-8" encoding="UTF-8" private="true" windowtitle="My Java Doc" use="true">
+            <classpath path="${classes}" />
+        </javadoc>
+    </target>
+    
+    <target name="run" depends="package">
+        <java classpath="" classname="">
+            <arg value="" />
+        </java>
+        <java jar="${dist}/xxx.jar" fork="true" />
+    </target>
+
+    <target name="zip" depends="package">
+        <zip destfile="${zip.dir}/${zip.name}" duplicate="preserve">
+            <zipfileset dir="${src}" includes="**/*.*" prefix="${project.name}/src" />
+            <zipfileset dir="${docs}" includes="**/*.*" prefix="${project.name}/docs/api" />
+        </zip>
+        <unzip src="test.tar.gz" dest="target" />
+    </target>
+
+    <!-- cvsRoot: [:method:][[user][:password]@]hostname[:[port]]/path/to/repository -->
+    <target name="replace">
+        <replace file="input.txt" token="old" value="new" />
+    </target>
+    
+    <target name="ftp">
+        <ftp userid="username" password="12345678" server="localhost" action="mkdir" remotedir="${project.name}"></ftp>
+        <ftp userid="username" password="12345678" server="localhost" action="put" remotedir="${project.name}">
+            <fileset dir="${zip}" includes="*.zip"></fileset>
+        </ftp>
+    </target>
+
+    <!--
+    <taskdef name="myTask" classname="org.j2ee.ant.MyTask" classpath="bin">
+    </taskdef>
+
+    <target name="myTarget">
+        <myTask attr1="" attr2="" />
+    </target>
+    -->
+</project>
