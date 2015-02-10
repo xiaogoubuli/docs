@@ -1,0 +1,73 @@
+<!DOCTYP html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Regular Expression</title>
+</head>
+<body>
+<pre>
+
+grep：
+-E, --extended-regexp 扩展正则表达式模式
+-G, --basic-regexp 基本正则表达式模式
+-P, --perl-regexp Perl正则表达式模式
+-o, --only-matching 只显示匹配模式行的相关部分
+-v, --invert-match 显示非匹配行
+-c, --count 只显示匹配的总行数
+
+JavaScript：
+RegExp.exec()
+String.match()
+String.replace()
+String.search()
+String.split()
+RegExp.test()
+g全局搜索
+i不区分大小写
+m支持多行字符串
+s支持单行字符串
+x忽略正则表达式模式里的空白字符
+$'返回被匹配字符串前的所有字符
+$`返回被匹配字符串后的所有字符
+$+返回最后一个被匹配的子表达式
+$&返回被匹配到的所有字符串
+不支持POSIX字符类
+不支持\A和\Z
+
+
+MySQL：
+SELECT * FROM table WHERE REGEXP "pattern"
+
+
+
+Java：
+java.util.regex.Matcher
+find()
+lookingAt()
+matches()
+replaceAll()
+replaceFirst()
+
+
+java.util.regex.Pattern
+compile()
+flags()
+matches()
+pattern()
+split()
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

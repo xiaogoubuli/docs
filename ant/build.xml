@@ -87,7 +87,7 @@
     </target>
     
     <target name="test" depends="compile">
-        <junit printsummary="false" haltonfailure="true">
+        <junit printsummary="false" haltonfailure="false" failureproperty="junit.fail">
             <classpath refid="test-path" />
             <formatter type="brief" usefile="false" />
             <!-- <test name="${test.class}"></test> -->
@@ -100,9 +100,10 @@
             <fileset dir="${report}" includes="TEST-*.xml" />
             <report format="frames" todir="${report}/html" />
         </junitreport>
+        <fail if="${junit.fail}" message="Test failure." />
     </target>
 
-    <target name="package" depends="compile" description="">
+    <target name="jar" depends="compile" description="">
         <tstamp />
         <!-- DSTAMP:yyyymmdd TSTAMP:hhmm TODAY:yyyy年mm月dd日 -->
         <jar destfile="${dist}/test-${DSTAMP}.jar" basedir="${classes}">
@@ -111,6 +112,15 @@
                 <attribute name="Main-Class" value="org.j2ee.util.Test" />
             </manifest>
         </jar>
+    </target>
+    
+    <target name="war">
+        <war destfile="" basedir="">
+            <fileset></fileset>
+            <lib></lib>
+            <webinfo></webinfo>
+            <classes></classes>
+        </war>
     </target>
     
     <target name="doc" depends="compile">
@@ -144,6 +154,14 @@
         <ftp userid="username" password="12345678" server="localhost" action="put" remotedir="${project.name}">
             <fileset dir="${zip}" includes="*.zip"></fileset>
         </ftp>
+    </target>
+    
+    <presetdef name="myftp">
+        <ftp userid="username" password="12345678" server="localhost" remotedir="${project.name}" />
+    </presetdef>
+    
+    <target>
+        <myftp action="mkdir" />
     </target>
 
     <!--
