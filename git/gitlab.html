@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>GitLab</title>
+</head>
+<body>
+<pre>
+CentOS 6:
+$ sudo yum install openssh-server
+$ sudo yum install postfix
+$ sudo yum install cronie
+$ sudo service postfix start
+$ chkconfig postfix on
+$ lokkit -s http -s ssh
+$ rpm -ivh gitlab-.rpm
+$ sudo gitlab-ctl reconfigure
+$ vi /var/opt/gitlab/gitlab-rails/etc/gitlab.yml
+$ vi /var/opt/gitlab/nginx/conf/gitlab-http.conf
+</pre>
+</body>
+</html>
