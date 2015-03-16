@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>JavaScript</title>
+</head>
+<body>
+<pre>
+({}).hasOwnProperty.call(obj, 'name');
+for (var i in obj) {
+    if (obj.hasOwnProperty(i)) {
+        console.log(i);
+    }
+}
+闭包和引用
+for (var i = 0; i < 10; i++) {
+    (function(e) {
+        setTimeout(function() {
+            console.log(e);
+        }, 1000);
+    })(i);
+}
+for (var i = 0; i < 10; i++) {
+    setTimeout((function(e) {
+        return function() {
+            console.log(e);
+        }
+    })(i), 1000);
+}
+数组
+var array = [];
+for (var i = 0, len = array.length; i++) {
+    console.log(array[i]);
+}
+</pre>
+</body>
+</html>

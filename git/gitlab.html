@@ -11,12 +11,18 @@ $ sudo yum install openssh-server
 $ sudo yum install postfix
 $ sudo yum install cronie
 $ sudo service postfix start
-$ chkconfig postfix on
-$ lokkit -s http -s ssh
-$ rpm -ivh gitlab-.rpm
+$ sudo chkconfig postfix on
+$ sudo lokkit -s http -s ssh
+$ sudo rpm -ivh gitlab-VERSION_omnibus-1.el6.x86_64.rpm
+$ vi /etc/gitlab/gitlab.rb
+external_url='http://localhost'
 $ sudo gitlab-ctl reconfigure
 $ vi /var/opt/gitlab/gitlab-rails/etc/gitlab.yml
 $ vi /var/opt/gitlab/nginx/conf/gitlab-http.conf
+
+Browse to the hostname and login
+Username: root
+Password: 5iveL!fe
 </pre>
 </body>
 </html>
