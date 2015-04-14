@@ -8,11 +8,24 @@
 <pre>
 $ ls [选项]... [文件]...
 列表信息
--a 显示隐藏文件
+-a 显示全部文件，包括隐藏文件
+-A 显示全部文件，包括隐藏文件，但不包括.和..
 -l 显示长格式
 -h 显示人性化大小
--d 显示目录信息
+-d 只显示目录信息
+-f 不排序
+-F 附加数据（*可执行文件；/目录；=socket文件；|FIFO文件）
 -i 显示inode号
+-n 列出UID与GID而不是名称
+-r 反序显示
+-R 列出子目录内容
+-S 以文件大小排序
+-t 以实际排序
+--color=never 不显示颜色
+--color=always 显示颜色
+--color=auto 自动判断颜色
+--full-time 以完整时间模式输出
+--time={atime,ctime} 输出访问时间或改变权限属性时间而非内容修改时间
 示例：
 $ ls -alh / /etc
 $ ls -d /etc
@@ -21,9 +34,11 @@ $ ls -i /
 $ mkdir [选项]... 目录...
 创建新目录
 -p 递归创建
+-m 配置权限
 示例：
 $ mkdir -p /tmp/a/b/c
 $ mkdir /tmp/a /tmp/b /tmp/c
+$ mkdir -m 711 /tmp/a
 
 $ cd [-L|-P] [目录]
 切换工作目录
@@ -32,9 +47,13 @@ $ cd ..
 $ cd -
 $ cd
 $ cd ~
+$ cd ~username
 
-$ pwd
+$ pwd [-P]
 显示当前工作路径
+示例：
+$ pwd /var/mail
+$ pwd -P /var/mail
 
 $ rmdir [选项]... 目录...
 删除空目录
@@ -132,6 +151,8 @@ x 执行 进入目录
 # chown :root /tmp
 # chown root: /tmp
 # chown root:root /tmp
+$ chown user.group /file
+$ chown .group /file
 
 # chgrp [选项]... 所属组 文件...
 改变文件的所属组
@@ -230,6 +251,8 @@ $ man services
 1 命令的帮助
 5 配置文件的帮助
 $ man 5 passwd
+$ man -f man
+$ man -k man
 
 $ makewhatis
 $ whatis 命令 ...
@@ -443,6 +466,9 @@ CTRL + D 保存结束
 示例：
 $ write root
 
+$ Ctrl + d
+    exit
+
 $ wall [信息]
 给所有在线用户发送信息
 CTRL + D 保存结束
@@ -522,11 +548,18 @@ $ umount 设备文件名或目录（挂载点）
 $ umount /dev/sr0
 $ umount /mnt/cdrom
 
+$ ps -aux
+
 $ shutdown [选项]... 时间 [消息]
 关机
 -c 取消当前执行的关机命令
 -h 关机
 -r 关机后重启
+-t 秒 过几秒后关机
+-k 不关机只发送警告信息
+-n 不经过init直接关机
+-f 重启略过fsck
+-F 重启强制进行fsck
 示例：
 $ shutdown -h 20:08
 $ shutdown -h now
@@ -657,9 +690,30 @@ echo $(($(date --date="2014/04/13" +%s)/86400+1))
 把日期换算为时间戳
 
 
+$ date
+$ date +%Y/%m/%d
+$ date +%H:%M
+
+$ cal
+$ cal [month] [year]
+示例：
+$ cal 2008
+$ cal 8 2008
+
 $ df -h
 $ du -sh dirname
 $ fsck
+$ fsck /dev/sda1
+$ fsck /dev/sdb1
+$ fsck /dev/sda7
+
+$ echo $LANG
+$ LANG=en_US
+$ locale
+
+$ uname -r
+
+$ lsb_release -a
 
 
 

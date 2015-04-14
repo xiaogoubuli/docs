@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Oracle SQL</title>
+</head>
+<body>
+<pre>
+查询语句
+SELECT
+
+数据操纵语言（Data Manipulation Language，DML）语句
+INSERT
+UPDATE
+DELETE
+
+数据定义语言（Data Definition Language，DDL）语句
+CREATE
+ALTER
+DROP
+RENAME
+TRUNCATE
+
+事务控制（Transaction Control，TC）语句
+COMMIT
+ROLLBACK
+SAVEPOINT
+
+数据控制语言（Data Control Language，DCL）语句
+GRANT
+REVOKE
+
+shell> sqlplus [username[/password[@hostString]]]
+shell> sqlplus username/password@connect_identifier as sysdba
+shell> sqlplus scott/tiger@orcl
+
+SQL> SELECT SYSDATE FROM dual;
+
+SQL> EDIT
+SQL> /
+
+SQL> @ store_schema.sql
+SQL> @ "PATH name.sql"
+SQL> EXIT;
+
+shell> sqlplus store/store_password
+SQL> DISCONNECT
+SQL> CONNECT store/store_password
+
+SQL> CREATE USER username IDENTIFIED BY password;
+SQL> GRANT connect, resource TO username;
+
+SQL> CREATE TABLE table_name (
+	column_name data_type CONSTRAINT constraint_name PRIMARY KEY,
+	column_name data_type CONSTRAINT constraint_name REFERENCES table_name(column_name),
+	column_name data_type NOT NULL,
+	...
+	CONSTRAINT constraint_name PRIMARY KEY(column_name)
+);
+
+SQL> SELECT * FROM table_name WHERE column_name = column_value;
+
+SQL> DESCRIBE table_name
+
+SQL> INSERT INTO table_name (column_name, ...) VALUES (column_value, ...);
+
+SQL> UPDATE table_name SET column_name = column_value WHERE column_name = column_value;
+
+SQL> DELETE FROM table_name WHERE column_name = column_value;
+
+SQL> ROLLBACK;
+
+SQL> COMMIT;
+
+SQL> INSERT INTO binary_test (bin_float, bin_double) VALUES (12.3f, 45.6d);
+
+BINARY_FLOAT_NAN
+BINARY_FLOAT_INFINITY
+BINARY_DOUBLE_NAN
+BINARY_DOUBLE_INFINITY
+
+SQL> EXIT
+
+SQL> CREATE OR REPLACE PROCEDURE update_pro () AS 
+BEGIN
+END;
+/
+
+SQL> SELECT list_of_items FROM list_of_tables WHERE list_of_conditions;
+
+SQL> SELECT 2 * 3 FROM dual;
+
+SQL> SELECT TO_DATE('25-JUL-2008') + 2 FROM dual;
+
+SQL> DESCRIBE dual
+SQL> SELECT * FROM dual;
+
+SQL> SELECT column_name_or_expression AS "Alie Name" FROM table_name;
+
+SQL> SELECT column_name || column_name "" FROM table_name;
+
+SQL> SELECT * FROM table_name WHERE column_name IS NULL;
+
+SQL> SELECT NVL(column_name, 'Null') FROM table_name;
+
+SQL> SELECT DISTINCT column_name FROM table_name;
+
+SQL> SELECT * FROM table_name WHERE column_name > ANY (1, 2, 3);
+SQL> SELECT * FROM table_name WHERE column_name > ALL (1, 2, 3);
+
+SQL> SELECT * FROM table_name WHERE column_name LIKE '%\%%' ESCAPE '\';
+
+SQL> SELECT * FROM table_name WHERE column_name IN (1, 2, 3);
+
+SQL> SELECT * FROM table_name WHERE column_name NOT IN (1, 2, 3, NULL); -- NOT IN中包含NULL返回false，结果集为空
+
+SQL> SELECT * FROM table_name WHERE column_name BETWEEN 1 AND 3;
+
+ORDER BY column_name ASC, column_name DESC
+ROWID
+ROWNUM
+INNER JOIN ON USING
+LEFT OUTER JOIN ON USING
+RIGHT OUTER JOIN ON USING
+FULL OUTER JOIN ON USING
+CROSS JOIN
+
+SQL> SET PAGESIZE 50000
+SQL> SET LINESIZE 32767
+SQL> SET ECHO OFF
+SQL> SET VERIFY OFF
+SQL> SET DEFINE '&'
+
+SQL> HELP
+
+SQL> SELECT 'DROP TABLE ' || table_name || ';' FROM user_tables;
+</pre>
+</body>
+</html>

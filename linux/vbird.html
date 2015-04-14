@@ -15,7 +15,64 @@
         Hz秒分之一
         Mbps每秒Mbit
         CPU每次能够处理的数据量称为字长大小(word size)， 字长大小依据CPU的设计而有32位与64位。
-        显示卡
+        Head * Cylinder * Sector * 512Bytes
+        $ cat /proc/cpuinfo
+        $ lscpu
+    第一章 Linux是什么
+        $ uname -r
+    第二章 Linux如何学习
+    第三章 主机规划与磁盘分区
+        /dev/hd[a-d]
+        /dev/sd[a-p]
+        /dev/fd[0-1]
+        /dev/lp[0-2]
+        /dev/usb/lp[0-15]
+        /dev/usb/mouse[0-15]
+        /dev/psaux
+        /dev/cdrom 当前光驱
+        /dev/mouse 当前鼠标
+        /dev/ht0
+        /dev/st0
+                        Master   Slave
+        IDE1(Primary)   /dev/hda /dev/hdb
+        IDE2(Secondary) /dev/hdc /dev/hdd
+        主引导记录 446 Byte
+        分区表 64 Byte
+        启动流程：
+            1. BIOS
+            2. MBR
+            3. 启动管理程序boot loader（提供菜单、加载核心文件、转交其他loader）
+            4. 核心文件
+        /boot
+        /
+        /home
+        /usr
+        /var
+        /tmp
+        swap
+    第四章 安装CentOS5.x与多重开机小技巧
+    第五章 首次登陆与在线求助man page
+        重启X Window
+            Ctrl + Alt + Backspace
+        切换窗口
+            Ctrl + Alt + F1 ~ F6
+            Ctrl + Alt + F7
+            $ startx
+        语系支持
+            $ echo $LANG
+            $ LANG=en_US
+$ man page
+1 使用者在shell环境中可以操作的命令或可运行文件
+2 系统核心可呼叫的函数与工具等
+3 一些常用的函数(function)与函式库(library)，大部分为C的函式库(libc)
+4 装置文件的说明，通常在/dev下的文件
+5 配置文件或者是某些文件的格式
+6 游戏(games)
+7 惯例与协议等，例如Linux文件系统、网络协议、ASCII code等等的说明
+8 系统管理员可用的管理命令
+9 跟kernel有关的文件
+    第六章 Linux的文件权限与目录配置
+    第七章 Linux文件与目录管理
 第二部分 Linux文件、目录与磁盘格式
 第三部分 学习Shell与Shell Scripts
 第四部分 Linux使用者管理
