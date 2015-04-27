@@ -47,14 +47,31 @@ $ git clone git://git.kernel.org/pub/scm/git/git.git
 .git/config 项目
   $ git config
 
+$ git config --help
+
 $ git config --global user.name "用户名"
 $ git config --global user.name "XiaoGouBuLi"
 $ git config --global user.email 电子邮箱
 $ git config --global user.email xiaogoubuli@163.com
 
 $ git config --global core.editor vim
+$ git config --global commit.template ~/.gitmessage.txt
 $ git config --global merge.tool vimdiff
 $ git config --global color.ui true
+
+$ git config --global core.pager ''
+分页器，默认less，可设置more或''
+$ git config --global user.signingkey <gpg-key-id> 
+$ git tag -s 标签名
+
+$ git config --global core.excludefile
+$ git config --global help.autocorrect
+
+$ git config --global core.autocrlf true
+$ git config --global core.autocrlf input
+$ git config --global core.autocrlf false
+
+$ git config --global core.whitespace trailing-space,space-before-tab,indent-with-non-tab
 
 查看配置信息
 $ git config --list
@@ -84,6 +101,7 @@ $ git config --global alias.last 'log -1 HEAD'
 $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
 $ git config --global alias.别名 '!外部命令'
 $ git config --global alias.gt '!gitk'
+$ git config --global alias.stash-unapply '!git stash show -p | git apply -R'
 备份.gitconfig文件
 
 创建仓库
@@ -105,7 +123,7 @@ $ git config --global alias.gt '!gitk'
 把文件添加到版本库
 1. $ git add 文件名或目录名
    $ git commit -m "描述信息"
-2. $ git commit -a -m "描述信息" （跳过使用暂存区，不推荐）
+2. $ git commit -a -m "描述信息" （跳过使用暂存区，不推荐，自动把所有已跟踪的文件暂存起来并提交）
 
 git add功能：
 1. 把修改后的已跟踪文件放到暂存区
@@ -147,16 +165,22 @@ doc/**/*.txt
 
 查看尚未暂存的文件更新了哪些部分，比较的是工作目录中当前文件和暂存区域快照之间的差异，也就是修改之后还没有暂存起来的变化内容。
 $ git diff
+
 $ git diff 文件名
 若要看已经暂存起来的文件和上次提交时的快照之间的差异，可以用 git diff --cached 命令。（Git 1.6.1 及更高版本还允许使用 git diff --staged，效果是相同的，但更好记些。）
 $ git diff --cached
+$ git diff --staged
 
 查看提交历史
 $ git log
 -p 选项展开显示每次提交的内容差异，用 -数值 则仅显示最近的几次更新
 $ git log -p -数值
+示例：
+$ git log -p -2
 进行单词层面的对比，新增加的单词被 {+ +} 括起来，被删除的单词被 [- -] 括起来。
 $ git log -U上下文行数（默认3） --word-diff
+示例：
+$ git log -U1 --word-diff
 显示简要的增改行数统计，每个提交都列出了修改过的文件，以及其中添加和移除的行数，并在最后列出所有增减行数小计。
 $ git log --stat
 用 oneline 将每个提交放在一行显示，这在提交数很大时非常有用。另外还有 short，full 和 fuller 可以用
@@ -166,6 +190,22 @@ $ git log --pretty=raw --graph 提交ID
 定制要显示的记录格式
 $ git log --pretty=format:"%h - %an, %ar : %s"
 $ git log --pretty=format:"%h %s" --graph
+常用的格式占位符写法及其代表的意义：
+%H	提交对象（commit）的完整哈希字串
+%h	提交对象的简短哈希字串
+%T	树对象（tree）的完整哈希字串
+%t	树对象的简短哈希字串
+%P	父对象（parent）的完整哈希字串
+%p	父对象的简短哈希字串
+%an	作者（author）的名字
+%ae	作者的电子邮件地址
+%ad	作者修订日期（可以用 -date= 选项定制格式）
+%ar	作者修订日期，按多久以前的方式显示
+%cn	提交者(committer)的名字
+%ce	提交者的电子邮件地址
+%cd	提交日期
+%cr	提交日期，按多久以前的方式显示
+%s	提交说明
 常用的选项及其释义
 -p	按补丁格式显示每个更新之间的差异。
 --word-diff	按 word diff 格式显示差异。
@@ -215,6 +255,40 @@ $ git diff master...edit
 
 修改最后一次提交
 $ git commit --amend
+修正会改变提交的SHA-1值。这个很像是一次非常小的rebase——不要在你最近一次提交被推送后还去修正它。
+
+$ git rebase -i HEAD~3
+
+$ git filter-branch --tree-filter 'rm -f passwords.txt' HEAD
+git filter-branch --tree-filter "find * -type f -name '*~' -delete" HEAD
+从所有提交中删除一个文件
+--tree-filter选项会在每次检出项目时先执行指定的命令然后重新提交结果。
+要在你所有的分支上运行filter-branch的话，你可以传递一个--all给命令。
+
+$ git filter-branch --subdirectory-filter trunk HEAD
+将一个子目录设置为新的根目录
+现在你的项目根目录就是trunk子目录了。Git 会自动地删除不对这个子目录产生影响的提交。
+
+$ git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "schacon@localhost" ];
+        then
+                GIT_AUTHOR_NAME="Scott Chacon";
+                GIT_AUTHOR_EMAIL="schacon@example.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+遍历并重写所有提交使之拥有你的新地址。因为提交里包含了它们的父提交的SHA-1值，这个命令会修改你的历史中的所有提交，而不仅仅是包含了匹配的电子邮件地址的那些。
+
+$ git blame -L 12,22 simplegit.rb
+
+$ git blame -C -L 141,153 GITPackUpload.m
+
+$ git bisect start
+$ git bisect bad
+$ git bisect good v1.0
+
+$ git bisect reset
 
 撤销文件的修改
 $ git checkout -- 文件名
@@ -227,6 +301,12 @@ $ git reset 文件名
 
 工作目录暂存区不变
 $ git reset --soft 提交ID
+
+^  第一父提交
+^2 第二父提交
+~  第一父提交
+~2 第一父提交的第一父提交
+^^ 第一父提交的第一父提交
 
 $ git reset --hard HEAD^
 $ git reset --hard HEAD~100
@@ -263,6 +343,7 @@ id_rsa.pub 公钥
 $ git remote add origin git@github.com:xiaogoubuli/docs.git
 
 推送
+$ git push 仓库名 分支名
 $ git push -u origin master （第一次推送）
 $ git push origin master
 
@@ -298,6 +379,8 @@ $ git merge 分支名称
 
 $ git merge 提交ID
 
+$ cat .git/HEAD
+
 $ git cat-file -p HEAD
 
 调用可视化合并工具
@@ -321,7 +404,19 @@ $ git merge --no-ff -m "merge with no-ff" 分支名称
 $ git stash
 $ git stash list
 $ git stash pop
+$ git stash apply
+$ git stash apply --index
+ --index重新应用被暂存的变更
+
 $ git stash apply stash@{0}
+
+$ git stash drop stash@{0}
+
+$ git stash show -p stash@{0} | git apply -R
+取消stash
+
+$ git stash branch 分支名
+从stash中创建分支
 
 远程仓库
 
@@ -346,16 +441,18 @@ $ git push origin master:newname
 抓取分支
 如果设置了某个分支用于跟踪某个远端仓库的分支，可以使用 git pull 命令自动抓取数据下来，然后将远端分支自动合并到本地仓库中当前分支。
 $ git pull
+$ git pull url
 
 设置本地分支与远程分支的链接
 $ git branch --set-upstream 本地分支名称 远程版本库/远程分支名称
 
-从远程仓库抓取数据，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。
+从远程仓库抓取数据，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。此命令会到远程仓库中拉取所有你本地仓库中还没有的数据。运行完成后，你就可以在本地访问该远程仓库中的所有分支，将其中某个分支合并到本地，或者只是取出某个分支，一探究竟。
 $ git fetch 仓库名
+如果是克隆了一个仓库，此命令会自动将远程仓库归于 origin 名下。所以，git fetch origin 会抓取从你上次克隆以来别人上传到此远程仓库中的所有更新（或是上次 fetch 以来别人提交的更新）。
 $ git fetch origin
 
 把该远程分支的内容合并到当前分支
-$ git merge origin/分支名
+$ git merge 仓库名/分支名
 $ git merge origin/master
 
 $ git branch -a
@@ -391,6 +488,72 @@ $ git rebase 主分支 特性分支
 $ git rebase master server
 $ git checkout master
 $ git merge server
+
+$ git checkout 提交ID
+
+$ git log origin/featureA ^featureA
+
+$ git request-pull origin/master myfork
+
+$ git merge --no-commit --squash featureB
+--squash 选项将目标分支上的所有更改全拿来应用到当前分支上，而 --no-commit 选项告诉 Git 此时无需自动生成和记录（合并）提交。
+
+$ git format-patch -M origin/master
+-M 选项允许 Git 检查是否有对文件重命名的提交。
+
+~/.gitconfig
+[imap]
+  folder = "[Gmail]/Drafts"
+  host = imaps://imap.gmail.com
+  user = user@gmail.com
+  pass = p4ssw0rd
+  port = 993
+  sslverify = false
+[sendemail]
+  smtpencryption = tls
+  smtpserver = smtp.gmail.com
+  smtpuser = user@gmail.com
+  smtpserverport = 587
+
+$ cat *.patch |git imap-send
+$ git send-email *.patch
+
+apply 打diff补丁
+$ git apply /*.patch
+$ git apply --check *.patch
+查看补丁是否能够干净顺利地应用到当前分支中
+
+$ git am *.patch
+对于 format-patch 制作的新式补丁，应当使用 git am 命令
+$ git am --resolved
+$ git am -3 *.patch
+$ git am -3 -i mbox
+
+$ git log contrib --not master
+用 --not 选项指定要屏蔽的分支 master，这样就会剔除重复的提交历史
+
+$ git diff master
+看当前分支同其他分支合并时的完整内容差异
+
+$ git merge-base contrib master
+36c7dba2c95e6bbb78dfa822519ecfec6e1ca649
+$ git diff 36c7db
+手工定位它们的共同祖先，然后与之比较
+
+$ git diff master...contrib
+
+$ git cherry-pick e43a6fd3e94888d76779ad79fb568ed180e5fcdf
+
+$ gpg --list-keys
+显示出你所拥有的key
+
+$ git describe master
+最近一次标定的版本号，加上自那次标定之后的提交次数，再加上一段所描述的提交的SHA-1值
+
+$ git archive master --prefix='project/' | gzip > `git describe master`.tar.gz
+$ git archive master --prefix='project/' --format=zip > `git describe master`.zip
+
+$ git shortlog --no-merges master --not v1.0.1
 
 一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。
 
@@ -444,6 +607,7 @@ $ git push 远程仓库 --tags
 source ~/.git-completion.bash
 也可以为系统上所有用户都设置默认使用此脚本。Mac 上将此脚本复制到 /opt/local/etc/bash_completion.d 目录中，Linux 上则复制到 /etc/bash_completion.d/ 目录中。这两处目录中的脚本，都会在 Bash 启动时自动加载。
 如果在 Windows 上安装了 msysGit，默认使用的 Git Bash 就已经配好了这个自动补全脚本，可以直接使用。
+命令的选项也可以用这种方式自动完成，其实这种情况更实用些。、
 
 搭建Git服务器
 CentOS
@@ -513,6 +677,36 @@ SSH 公钥默认储存在账户的主目录下的 ~/.ssh 目录。
 $ git log --no-merges
 
 $ git log --no-merges origin/master ^issue54
+
+$ git log -g master
+$ git show HEAD@{2.months.ago}
+
+$ git log master..dev
+
+$ git log origin/master..HEAD
+$ git log origin/master..
+显示任何在你当前分支上而不在远程origin 上的提交
+
+$ git log refA..refB
+$ git log ^refA refB
+$ git log refB --not refA
+
+$ git log refA refB ^refC
+$ git log refA refB --not refC
+
+$ git log master...experiment
+指定被两个引用中的一个包含但又不被两者同时包含的分支
+$ git log --left-right master...experiment
+
+交互式暂存
+$ git add -i
+
+子模块
+$ git submodule add git://github.com/chneukirchen/rack.git rack
+
+$ git submodule init
+
+$ git submodule update
 
 git svn
 </pre>
