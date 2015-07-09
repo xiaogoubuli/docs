@@ -96,7 +96,8 @@ SQL> DROP USER 用户名 CASCADE;
 
 创建表空间：
 SQL> CREATE TABLESPACE 表空间名 datafile '文件路径名' size 500m autoextend on next 100m maxsize unlimited logging extent management local autoallocate segment space management auto;
-
+删除表空间：
+SQL> DROP TABLESPACE 表空间名 INCLUDING CONTENTS AND DATAFILES;
 
 Oracle Database 10g SQL
 SQL：Structured Query Language 结构化查询语言
