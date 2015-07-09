@@ -70,7 +70,7 @@ exit
 
 管理：
 导入dmp：
-$ imp 用户名/密码@主机名或ip/实例名 file=文件路径名 full=y
+$ imp 用户名/密码[@主机名或ip[/实例名]] file=文件路径名 full=y
 导出dmp：
 $ exp 用户名/密码@主机名或ip/实例名 file=文件路径名 tables="表名" query=\"where 字段名 like '%条件%'\"
 
@@ -87,6 +87,15 @@ SQL> ALTER USER sys IDENTIFIED BY 12345678;
 
 优化：
 
+创建用户：
+SQL> CREATE USER 用户名 IDENTIFIED BY 密码;
+授权用户：
+SQL> GRANT connect, resource, dba TO 用户名;
+删除用户：
+SQL> DROP USER 用户名 CASCADE;
+
+创建表空间：
+SQL> CREATE TABLESPACE 表空间名 datafile '文件路径名' size 500m autoextend on next 100m maxsize unlimited logging extent management local autoallocate segment space management auto;
 
 
 Oracle Database 10g SQL
