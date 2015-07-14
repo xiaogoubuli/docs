@@ -1,0 +1,2 @@
+get请求乱码
+tomcat配置<Connector port="8080" URIEncoding="UTF-8" />
