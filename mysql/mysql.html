@@ -10,6 +10,11 @@
 
 mysql> help
 
+修改root密码：
+shell> mysqladmin -u用户名 -p旧密码 password 新密码
+示例：
+shell> mysqladmin -uroot -p123456 password 12345678
+
 忘记密码：
 [mysqld]
 skip-grant-tables

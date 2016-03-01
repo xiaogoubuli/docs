@@ -6,6 +6,20 @@
 </head>
 <body>
 <pre>
+环境变量配置：
+JAVA_HOME=D:/Java/jdk;
+CLASSPATH=.;%JAVA_HOME%/lib/tools.jar;%JAVA_HOME%/lib/dt.jar
+PATH=%JAVA_HOME%/bin
+
+Linux：
+$ tar zxvf server-jre-VERSION-linux-x64.gz
+$ mv jdkVERSION /usr/local/
+$ vim /etc/profile
+export JAVA_HOME=/usr/local/jdkVERSION
+export PATH=$JAVA_HOME\bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
+$ java -version
+
 shell> javadoc -help
 shell> javadoc [选项] [包] [源文件] [@文件]
 -d <目录>             输出文件的目标目录

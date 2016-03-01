@@ -31,20 +31,28 @@ $ git clone git://git.kernel.org/pub/scm/git/git.git
 1.1.1
   $ sudo yum install git
 1.1.2
-  $ sudo yum install gcc gcc-c++ curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel
-  $ sudo tar zxvf git-VERSION
+  $ sudo yum install gcc gcc-c++ perl-devel
+  $ sudo yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+  $ sudo yum install asciidoc xmlto docbook2x
+  $ sudo tar zxvf git-VERSION.tar.gz
   $ cd git-VERSION
+  // $ make configure
+  // $ ./configure --prefix=/usr
+  // make all doc info
+  // sudo make install install-doc install-html install-info
   $ sudo make prefix=/usr/local all
   $ sudo make prefix=/usr/local install
+  获取Git
+  $ git clone git://git.kernel.org/pub/scm/git/git.git
 2. Windows
   msysgit http://msysgit.github.io/
 
 配置
-/etc/gitconfig 系统
+/etc/gitconfig 系统所有用户
   $ git config --system
-~/.gitconfig 用户
+~/.gitconfig或~/.config/git/config 当前用户
   $ git config --global
-.git/config 项目
+.git/config 当前项目仓库
   $ git config
 
 $ git config --help
@@ -131,6 +139,7 @@ git add功能：
 3. 标记冲突文件为已解决并将其放到暂存区
 
 暂存所有更新
+$ git add *
 $ git add .
 启动文本编辑器输入提交描述信息，默认的提交消息包含最后一次运行 git status 的输出，放在注释行里，退出编辑器时，Git 会丢掉注释行，将说明内容和本次更新提交到仓库。
 $ git commit
@@ -139,10 +148,15 @@ $ git commit -v
 
 $ git status
 $ git status -s
+$ git status --short
+未跟踪文件前面有??标记，添加到暂存区中的文件前面有A标记，修改过的文件前面有M标记。M有两个可以出现的位置，出现在右边的M表示该文件被修改了但是还没放入暂存区，出现在靠左边的M表示该文件被修改了并放入了暂存区。
 
 忽略特殊文件 https://github.com/github/gitignore
 编辑.gitignore文件
 # 空行或以注释符号#开头的行会被Git忽略，可以使用标准的glob模式匹配
+# 匹配模式可以以/开头防止递归
+# 匹配模式可以以/结尾指定目录
+# 所谓的glob模式是指shell所使用的简化了的正则表达式。星号（*）匹配零个或多个任意字符；[abc]匹配任何一个列在方括号中的字符；问号（?）只匹配一个任意字符；如果在方括号中使用短划线分隔两个字符，表示所有在这两个字符范围内的都可以匹配。 使用两个星号（**）表示匹配任意中间目录。
 # Windows:
 Thumbs.db
 ehthumbs.db
@@ -171,19 +185,25 @@ $ git diff 文件名
 $ git diff --cached
 $ git diff --staged
 
+可以使用git difftool命令来用Araxis，emerge或vimdiff等软件输出diff分析结果。使用git difftool --tool-help命令来看你的系统支持哪些Git Diff插件。
+
 查看提交历史
 $ git log
+
 -p 选项展开显示每次提交的内容差异，用 -数值 则仅显示最近的几次更新
 $ git log -p -数值
 示例：
 $ git log -p -2
+
 进行单词层面的对比，新增加的单词被 {+ +} 括起来，被删除的单词被 [- -] 括起来。
 $ git log -U上下文行数（默认3） --word-diff
 示例：
 $ git log -U1 --word-diff
+
 显示简要的增改行数统计，每个提交都列出了修改过的文件，以及其中添加和移除的行数，并在最后列出所有增减行数小计。
 $ git log --stat
-用 oneline 将每个提交放在一行显示，这在提交数很大时非常有用。另外还有 short，full 和 fuller 可以用
+
+用oneline将每个提交放在一行显示。另外还有short，full和fuller可以用
 $ git log --pretty=oneline
 $ git log --pretty=raw
 $ git log --pretty=raw --graph 提交ID
@@ -206,6 +226,7 @@ $ git log --pretty=format:"%h %s" --graph
 %cd	提交日期
 %cr	提交日期，按多久以前的方式显示
 %s	提交说明
+
 常用的选项及其释义
 -p	按补丁格式显示每个更新之间的差异。
 --word-diff	按 word diff 格式显示差异。
@@ -215,7 +236,7 @@ $ git log --pretty=format:"%h %s" --graph
 --name-status	显示新增、修改、删除的文件清单。
 --abbrev-commit	仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
 --relative-date	使用较短的相对时间显示（比如，“2 weeks ago”）。
---graph	显示 ASCII 图形表示的分支合并历史。
+--graph	显示ASCII图形表示的分支合并历史。
 --pretty	使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。
 --oneline	--pretty=oneline --abbrev-commit 的简化用法。
 -(n)	仅显示最近的 n 条提交
@@ -224,10 +245,17 @@ $ git log --pretty=format:"%h %s" --graph
 --author	仅显示指定作者相关的提交。
 --committer	仅显示指定提交者相关的提交。
 --grep 选项搜索提交说明中的关键字
+-S 仅显示添加或移除了某个关键字的提交
+
 如果要得到同时满足这两个选项搜索条件的提交，就必须用 --all-match 选项。否则，满足任意一个条件的提交都会被匹配出来
 另一个真正实用的git log选项是路径(path)，如果只关心某些文件或者目录的历史提交，可以在 git log 选项的最后指定它们的路径。因为是放在最后位置上的选项，所以用两个短划线（--）隔开之前的选项和后面限定的路径名。
 
+列出所有最近两周内的提交
 $ git log --since=2.weeks
+
+找出添加或移除了某一个特定函数的引用的提交
+$ git log -S函数名
+
 $ git log --pretty="%h - %s" --author=gitster --since="2008-10-01" --before="2008-11-01" --no-merges -- t/
 
 $ git log 分支名 --not 屏蔽的分支名
@@ -255,7 +283,15 @@ $ git diff master...edit
 
 修改最后一次提交
 $ git commit --amend
+这个命令会将暂存区中的文件提交。如果自上次提交以来你还未做任何修改，那么快照会保持不变，所修改的只是提交信息。
+文本编辑器启动后，可以看到之前的提交信息。 编辑后保存会覆盖原来的提交信息。
 修正会改变提交的SHA-1值。这个很像是一次非常小的rebase——不要在你最近一次提交被推送后还去修正它。
+
+示例：
+$ git commit -m "initial commit"
+$ git add forgotten_file
+$ git commit --amend
+最终只会有一个提交，第二次提交将代替第一次提交的结果。
 
 $ git rebase -i HEAD~3
 
@@ -319,11 +355,14 @@ $ git rm 文件名
 强制删除
 $ git rm -f 文件名
 $ git commit -m "描述信息"
+
 移除跟踪但不删除文件
 $ git rm --cached 文件名
-删除所有 log/ 目录下扩展名为 .log 的文件
+
+删除所有log/目录下扩展名为.log的文件
 $ git rm log/\*.log
-递归删除当前目录及其子目录中所有 ~ 结尾的文件
+
+递归删除当前目录及其子目录中所有~结尾的文件
 $ git rm \*~
 
 Git 并不跟踪文件移动操作
@@ -359,6 +398,9 @@ $ git branch 分支名
 $ git branch edit
 $ git branch 分支名 基础分支名
 $ git branch edit master
+
+查看各个分支当前所指的对象
+$ git log --oneline --decorate
 
 切换分支
 $ git checkout 分支名称
@@ -423,9 +465,11 @@ $ git stash branch 分支名
 查看远程仓库信息
 $ git remote show 远程仓库
 $ git remote show origin
+
 列出每个远程库的简短名字
 $ git remote
-显示对应的克隆地址
+
+显示需要读写远程仓库使用的Git保存的简写与其对应的URL。
 $ git remote -v
 
 添加远程仓库
@@ -446,8 +490,9 @@ $ git pull url
 设置本地分支与远程分支的链接
 $ git branch --set-upstream 本地分支名称 远程版本库/远程分支名称
 
-从远程仓库抓取数据，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。此命令会到远程仓库中拉取所有你本地仓库中还没有的数据。运行完成后，你就可以在本地访问该远程仓库中的所有分支，将其中某个分支合并到本地，或者只是取出某个分支，一探究竟。
+从远程仓库抓取数据，fetch命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只能手工合并。此命令会到远程仓库中拉取所有你本地仓库中还没有的数据。运行完成后，就可以在本地访问该远程仓库中的所有分支，将其中某个分支合并到本地，或者只是取出某个分支。
 $ git fetch 仓库名
+
 如果是克隆了一个仓库，此命令会自动将远程仓库归于 origin 名下。所以，git fetch origin 会抓取从你上次克隆以来别人上传到此远程仓库中的所有更新（或是上次 fetch 以来别人提交的更新）。
 $ git fetch origin
 
@@ -569,6 +614,8 @@ $ git remote rm origin
 
 查看所有标签
 $ git tag
+这个命令以字母顺序列出标签，但是它们出现的顺序并不重要。
+
 列出符合条件的标签
 $ git tag -l 'v0.*'
 
@@ -595,11 +642,14 @@ $ git tag -d 标签名
 $ git push 远程版本库 :refs/tags/标签名称
 
 推送指定标签到远程仓库
-默认情况下，git push 并不会把标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。
+默认情况下，git push并不会把标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。
 $ git push 远程仓库 标签名
 
 推送全部尚未推送的本地标签到远程仓库
 $ git push 远程仓库 --tags
+
+检出标签
+$ git checkout -b [分支名] [标签名]
 
 技巧
 自动补全

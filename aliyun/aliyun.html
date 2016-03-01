@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Aliyun</title>
+</head>
+<body>
+<pre>
+CentOS 6.5 x64
+
+挂载数据盘（查看、分区、格式化、挂载）
+# df -hT
+# fdisk -l
+# fdisk -S 56 /dev/xvdb
+根据提示依次输入“n”、“p”、“1”、两次回车、“wq”
+# fdisk -l
+# mkfs.ext4 /dev/xvdb1
+# mkdir /data
+# echo '/dev/xvdb1  /data  ext4  defaults  0 0' >> /etc/fstab
+# cat /etc/fstab
+# mount -a
+
+添加用户
+# useradd server
+# passwd server
+# visudo
+server  ALL=(ALL)   ALL
+
+安装软件
+# yum install vim
+
+创建软件安装文件目录
+# mkdir /data/usr
+# cd /data/usr
+
+上传软件到/data/usr/目录
+
+安装jre
+# cd /data/usr/
+# rpm -qa | grep jdk
+# tar zxvf server-jre-VERSION-linux-x64.gz
+# mv jdkVERSION /data/usr/
+# /data/usr/jdkVERSION/bin/java -version
+# vim /etc/profile
+export JAVA_HOME=/data/usr/jdkVERION
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
+# source /etc/profile
+# java -version
+
+安装tomcat
+# tar zxvf apache-tomcat-VERSION.tar.gz
+# mv apache-tomcat-VERSION /data/usr/
+# /data/usr/apache-tomcat-VERION/bin/startup.sh
+# ps -ef | grep tomcat
+# kill -s 9 pid
+
+安装mysql
+# groupadd mysql
+# useradd -g mysql mysql -s /bin/false
+# mkdir -p /data/mysql
+# chown -R mysql:mysql /data/mysql
+# mkdir -p /data/usr/mysql
+# tar zxvf mysql-VERION.tar.gz 
+# mv mysql-VERSION /data/usr/
+# cd /data/usr/mysql-VERSION
+# yum install cmake ncurses*
+# cmake . -DCMAKE_INSTALL_PREFIX=/data/usr/mysql  -DMYSQL_DATADIR=/data/mysql  -DSYSCONFDIR=/etc
+# make
+# make install
+# rm -rf /etc/my.cnf
+# /data/usr/mysql/scripts/mysql_install_db --user=mysql --basedir=/data/usr/mysql --datadir=/data/mysql
+# ln -s /data/usr/mysql/my.cnf /etc/my.cnf
+# cp /data/usr/mysql/support-files/mysql.server /etc/rc.d/init.d/mysqld
+# chmod 755 /etc/init.d/mysqld
+# chkconfig mysqld on
+# vim /etc/rc.d/init.d/mysqld
+basedir=/data/usr/mysql
+datadir=/data/mysql
+# service mysqld start
+# vim /etc/profile
+export PATH=$PATH:/data/usr/mysql/bin
+# source /etc/profile
+
+# ln -s /data/usr/mysql/lib/mysql /usr/lib/mysql
+# ln -s /data/usr/mysql/include/mysql /usr/include/mysql
+# mkdir /var/lib/mysql
+# ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock
+
+# mysql_secure_installation
+
+/data/usr/mysql/bin/mysqladmin -u root password 'new-password'
+/data/usr/mysql/bin/mysqladmin -u root -h iZ25k8srrjmZ password 'new-password'
+/data/usr/mysql/bin/mysql_secure_installation
+
+
+设置mysql远程连接root权限
+# mysql -u root -p
+mysql> use mysql;
+mysql> select host, user, password from user;
+mysql> grant all privileges on *.* to 'root'@'%' identified by '远程连接密码' with grant option;
+mysql> flush privileges;
+
+设置mysql表名不区分大小写
+# vim /etc/my.cnf
+[mysqld]
+lower_case_table_names=1
+# service mysqld restart
+
+解压缩项目  
+# yum install p7zip
+# 7za x hzj.7z
+
+设置80端口和编码
+# vim /data/server.xml
+port="80"
+URIEncoding="UTF-8"
+   
+<host>
+    <Context path="" debug="0" docBase="hzj" reloadable="true" />
+</host>
+
+或
+${CATALINA_BASE}/conf/catalina/localhost/ROOT.xml
+ROOT.xml
+{code="xml"}
+<Context docBase="hzj" /> 
+{code}
+
+
+cmd> encrypt.bat input="密码" password=加密密码
+
+</pre>
+</body>
+</html>
